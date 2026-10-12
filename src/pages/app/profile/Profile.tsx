@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoOra from "../../../assets/ora-logo.png";
 import totemTriangle from "../../../assets/icons/totem-triangle-24.svg";
 import { Avatar } from "../../../components/Avatar";
 import { ConfirmSheet } from "../../../components/ConfirmSheet";
 import { Tag } from "../../../components/Tag";
+import { useToast } from "../../../components/Toast";
 import { Toggle } from "../../../components/Toggle";
 import { getGeneration } from "../../../data/catalogs";
 import { DEFAULT_SETTINGS } from "../../../data/types";
+import { disablePush, enablePush, getPushStatus, type PushStatus } from "../../../lib/push";
 import { useAuth } from "../../../state/AuthContext";
 import "./Profile.css";
 
@@ -17,8 +19,44 @@ export function Profile() {
   const navigate = useNavigate();
   const { user, team, logout, updateSettings } = useAuth();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const { showToast } = useToast();
+  // Estado de las notificaciones en ESTE celular (cada aparato se activa por separado).
+  const [push, setPush] = useState<PushStatus | null>(null);
+  const [pushBusy, setPushBusy] = useState(false);
+
+  useEffect(() => {
+    void getPushStatus().then(setPush);
+  }, []);
 
   if (!user) return null;
+
+  /** Recordatorio diario a las 8:00 a. m.: pide permiso al activarlo (toque de la persona). */
+  async function toggleDailyReminder(next: boolean) {
+    setPushBusy(true);
+    try {
+      if (next) {
+        const status = await enablePush();
+        setPush(status);
+        if (status === "subscribed") {
+          await updateSettings({ dailyRitualReminder: true });
+          showToast("Listo: te recordaremos el ritual cada día a las 8:00 a. m.", "primary");
+        } else if (status === "unsupported") {
+          showToast("Para recibir notificaciones, instala ORA en tu pantalla de inicio y ábrela desde el ícono.");
+        } else if (status === "denied") {
+          showToast("Las notificaciones de ORA están bloqueadas. Actívalas en Ajustes del celular → Notificaciones → ORA.");
+        }
+      } else {
+        await disablePush();
+        setPush("off");
+        await updateSettings({ dailyRitualReminder: false });
+        showToast("Recordatorio diario desactivado en este celular.", "primary");
+      }
+    } catch {
+      showToast("No pudimos cambiar el recordatorio. Inténtalo de nuevo.");
+    } finally {
+      setPushBusy(false);
+    }
+  }
 
   const settings = { ...DEFAULT_SETTINGS, ...user.settings };
   const generation = getGeneration(user.generation);
@@ -77,11 +115,15 @@ export function Profile() {
         </h2>
         <ul className="settings">
           <li className="settings__row">
-            <span className="settings__label">Notificación ritual diario</span>
+            <span className="settings__label">
+              Notificación ritual diario
+              <span className="settings__hint">Cada día a las 8:00 a. m.</span>
+            </span>
             <Toggle
               label="Notificación ritual diario"
-              checked={settings.dailyRitualReminder}
-              onChange={(next) => void updateSettings({ dailyRitualReminder: next })}
+              checked={settings.dailyRitualReminder && push === "subscribed"}
+              disabled={pushBusy || push === null}
+              onChange={(next) => void toggleDailyReminder(next)}
             />
           </li>
           <li className="settings__row">
