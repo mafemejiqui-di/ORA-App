@@ -39,11 +39,15 @@ export function BottomNav() {
           aria-label={item.label}
           title={item.label}
         >
-          {/* El ícono de Figma se usa como máscara para poder teñirlo según el estado. */}
+          {/*
+            El ícono de Figma se usa como máscara para poder teñirlo según el estado. Va entre comillas:
+            en la versión publicada Vite lo incrusta como "data:image/svg+xml,…" con comillas simples
+            adentro, y sin comillas el navegador descarta la máscara (se veía un cuadrado gris).
+          */}
           <span
             className="bottom-nav__icon"
             aria-hidden="true"
-            style={{ WebkitMaskImage: `url(${item.icon})`, maskImage: `url(${item.icon})` }}
+            style={{ WebkitMaskImage: `url("${item.icon}")`, maskImage: `url("${item.icon}")` }}
           />
         </NavLink>
       ))}
