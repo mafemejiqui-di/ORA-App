@@ -490,6 +490,30 @@ export async function ensureWeeklyInsight(teamId: string): Promise<void> {
   }
 }
 
+// ── Semanas del equipo (tensiones semana por semana; ver supabase/04_weeks.sql) ──
+
+export type TeamWeek = {
+  cycleNumber: number;
+  week: number;
+  startsAt: string;
+  endsAt: string;
+  /** La semana todavía no termina. */
+  current: boolean;
+  /** Personas que registraron algo esa semana. */
+  respondents: number;
+  /** Temas con más tensión esa semana (máximo 3, valor relativo 0–1); vacío con menos de 3 personas. */
+  tension: { label: string; value: number }[];
+};
+
+/** Todas las semanas del equipo, de la más antigua a la más reciente. */
+export async function getTeamWeeks(teamId: string): Promise<TeamWeek[]> {
+  try {
+    return (unwrap(await supabase.rpc("get_team_weeks", { p_team: teamId })) as TeamWeek[] | null) ?? [];
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
+
 // ── Administradora ────────────────────────────────────────────────────
 
 /** Datos que ve la administradora: equipos, integrantes, uso diario y patrones (todo agregado). */
@@ -506,6 +530,8 @@ export type AdminSnapshot = {
   dashboards: Record<string, TeamDashboard>;
   /** Lecturas de la IA de cada equipo, de la más reciente a la más antigua. */
   insights: Record<string, TeamInsight[]>;
+  /** Semanas de cada equipo con sus tensiones, de la más antigua a la más reciente. */
+  weeks: Record<string, TeamWeek[]>;
 };
 
 export async function getAdminSnapshot(): Promise<AdminSnapshot> {
@@ -521,6 +547,7 @@ export async function getAdminSnapshot(): Promise<AdminSnapshot> {
       // Si falta la lectura de la última semana de algún equipo, se genera en segundo plano.
       Promise.all(teams.map((t) => getTeamInsights(t.id).catch(() => [] as TeamInsight[]))),
     ]);
+    const weekLists = await Promise.all(teams.map((t) => getTeamWeeks(t.id).catch(() => [] as TeamWeek[])));
     teams.forEach((t) => void ensureWeeklyInsight(t.id));
     return {
       teams,
@@ -530,6 +557,7 @@ export async function getAdminSnapshot(): Promise<AdminSnapshot> {
       tension: overview?.tension ?? {},
       dashboards: Object.fromEntries(teams.map((t, i) => [t.id, dashboards[i]])),
       insights: Object.fromEntries(teams.map((t, i) => [t.id, insightLists[i]])),
+      weeks: Object.fromEntries(teams.map((t, i) => [t.id, weekLists[i]])),
     };
   } catch (err) {
     throw toApiError(err);

@@ -337,6 +337,72 @@
   margin-top: 14px;
 }
 
+/* Selector de semana de la vista Ciclo: ‹ Ciclo 1 · Semana 2 › */
+.admin-weeknav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 6px;
+  border-radius: 12px;
+  background: var(--color-teal-pill);
+}
+
+.admin-weeknav__arrow {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--color-primary);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.admin-weeknav__arrow:disabled {
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
+  opacity: 0.35;
+}
+
+.admin-weeknav__arrow:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.admin-weeknav__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+.admin-weeknav__label strong {
+  color: var(--color-brand-dark);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 19.5px;
+}
+
+.admin-weeknav__label span {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 16.5px;
+}
+
+.admin-insight {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(211, 209, 199, 0.5);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .admin-accordion__chevron {
     transition: none;

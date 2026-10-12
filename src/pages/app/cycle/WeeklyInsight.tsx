@@ -28,7 +28,8 @@ export function useTeamInsights(teamId: string | null) {
   return state;
 }
 
-function InsightBody({ insight }: { insight: TeamInsight }) {
+/** Contenido de una lectura: resumen visible, patrón y sugerencia plegables (también en la vista de la admin). */
+export function InsightBody({ insight }: { insight: TeamInsight }) {
   if (insight.status === "insufficient") {
     return <p className="insight__note">Esta semana respondieron menos de 3 personas, así que no hubo lectura.</p>;
   }
