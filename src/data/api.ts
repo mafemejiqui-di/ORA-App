@@ -393,7 +393,10 @@ export type TeamDashboard = {
   /** Mínimo de personas de una generación para "Fricción más frecuente" (2). */
   minFriction?: number;
   /** Personas que respondieron cada módulo en el ciclo en curso. */
-  progress: Record<CycleModule, number>;
+  progress: Record<CycleModule, number> & {
+    /** Personas que registraron una decisión hoy (se reinicia cada día). */
+    decisionToday?: number;
+  };
   /** Fricción promedio (0–1) y % del total, solo generaciones con respuestas suficientes. */
   friction: { generation: GenerationId; value: number; share: number }[];
   /** Temas de tensión del ciclo (máximo 3, valor relativo 0–1). */

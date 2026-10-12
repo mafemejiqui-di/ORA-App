@@ -211,9 +211,11 @@ function ParticipationCard({
 }) {
   const members = dashboard?.members ?? 0;
   const progress = dashboard?.progress ?? { diagnosis: 0, decision: 0, closing: 0 };
+  // "Tomar una decisión" se mide por día: integrantes que la registraron hoy (vuelve a 0 cada día).
+  const decisionToday = progress.decisionToday ?? 0;
   const steps = {
     diagnosis: percent(progress.diagnosis, members),
-    decision: percent(progress.decision, members),
+    decision: percent(decisionToday, members),
     closing: percent(progress.closing, members),
   };
   // Participación general: promedio de los módulos cuya semana ya llegó.
@@ -243,12 +245,13 @@ function ParticipationCard({
             {steps.diagnosis}%
           </span>
         </li>
-        <li className={week >= 2 ? "ring-legend__item" : "ring-legend__item ring-legend__item--pending"}>
+        {/* Abierto todos los días: el porcentaje es de hoy y se reinicia cada día. */}
+        <li className="ring-legend__item">
           <span className="ring-legend__label">
             <span className="ring-legend__dot ring-legend__dot--teal" /> Tomar una decisión
           </span>
-          <span className="ring-legend__value ring-legend__value--teal" title={of(progress.decision)}>
-            {steps.decision}%
+          <span className="ring-legend__value ring-legend__value--teal" title={of(decisionToday)}>
+            {steps.decision}% <span className="ring-legend__hint">hoy</span>
           </span>
         </li>
         <li className={week >= 3 ? "ring-legend__item" : "ring-legend__item ring-legend__item--pending"}>

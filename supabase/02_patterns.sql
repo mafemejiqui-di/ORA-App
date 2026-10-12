@@ -158,9 +158,13 @@ begin
   select count(*) into members from public.profiles where team_id = p_team;
 
   -- Participación del ciclo en curso: cuántas personas respondieron cada módulo.
+  -- "decisionToday": quienes registraron una decisión HOY (hora de Colombia); vuelve a 0 cada día.
   select jsonb_build_object(
     'diagnosis', (select count(distinct user_id) from public.diagnoses where cycle_id = cur.id),
     'decision',  (select count(distinct user_id) from public.decisions where cycle_id = cur.id),
+    'decisionToday', (select count(distinct user_id) from public.decisions
+                       where cycle_id = cur.id
+                         and (saved_at at time zone 'America/Bogota')::date = (now() at time zone 'America/Bogota')::date),
     'closing',   (select count(distinct user_id) from public.closings  where cycle_id = cur.id)
   ) into progress;
 
