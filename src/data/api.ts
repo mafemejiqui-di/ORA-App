@@ -427,6 +427,69 @@ export function subscribeTeamActivity(teamId: string | null, onActivity: () => v
   };
 }
 
+// ── Lectura semanal con IA (Gemini; ver supabase/03_insights.sql y functions/lectura-semanal) ──
+
+export type TeamInsight = {
+  id: string;
+  cycleNumber: number;
+  week: number;
+  /** ok: lectura lista · insufficient: menos de 3 personas respondieron · error: la IA falló (se reintenta). */
+  status: "ok" | "insufficient" | "error";
+  resumen: string | null;
+  patron: string | null;
+  sugerencia: string | null;
+  createdAt: string;
+};
+
+type InsightRow = {
+  id: string;
+  cycle_number: number;
+  week: number;
+  status: TeamInsight["status"];
+  resumen: string | null;
+  patron: string | null;
+  sugerencia: string | null;
+  created_at: string;
+};
+
+/** Lecturas del equipo, de la más reciente a la más antigua. */
+export async function getTeamInsights(teamId: string): Promise<TeamInsight[]> {
+  try {
+    const rows = unwrap(
+      await supabase
+        .from("team_insights")
+        .select("id, cycle_number, week, status, resumen, patron, sugerencia, created_at")
+        .eq("team_id", teamId)
+        .order("cycle_number", { ascending: false })
+        .order("week", { ascending: false }),
+    ) as InsightRow[] | null;
+    return (rows ?? []).map((r) => ({
+      id: r.id,
+      cycleNumber: r.cycle_number,
+      week: r.week,
+      status: r.status,
+      resumen: r.resumen,
+      patron: r.patron,
+      sugerencia: r.sugerencia,
+      createdAt: r.created_at,
+    }));
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
+
+/**
+ * Pide a la Edge Function la lectura de la última semana terminada (si ya existe, no hace nada).
+ * Nunca lanza error: si la IA no está disponible, la app sigue funcionando sin lectura.
+ */
+export async function ensureWeeklyInsight(teamId: string): Promise<void> {
+  try {
+    await supabase.functions.invoke("lectura-semanal", { body: { teamId } });
+  } catch (err) {
+    console.warn("[ORA] lectura semanal no disponible", err);
+  }
+}
+
 // ── Administradora ────────────────────────────────────────────────────
 
 /** Datos que ve la administradora: equipos, integrantes, uso diario y patrones (todo agregado). */
@@ -441,6 +504,8 @@ export type AdminSnapshot = {
   tension: Record<string, { label: string; value: number }[]>;
   /** Tablero de cada equipo (patrones del ciclo en curso). */
   dashboards: Record<string, TeamDashboard>;
+  /** Lecturas de la IA de cada equipo, de la más reciente a la más antigua. */
+  insights: Record<string, TeamInsight[]>;
 };
 
 export async function getAdminSnapshot(): Promise<AdminSnapshot> {
@@ -449,11 +514,14 @@ export async function getAdminSnapshot(): Promise<AdminSnapshot> {
       await supabase.from("teams").select("id, name, code, cycle_anchor").order("created_at"),
     ) as TeamRow[];
     const teams = rows.map((row) => toTeam(row));
-    const [overview, memberLists, dashboards] = await Promise.all([
+    const [overview, memberLists, dashboards, insightLists] = await Promise.all([
       supabase.rpc("get_admin_overview", { p_days: 14 }).then(unwrap),
       Promise.all(teams.map((t) => getTeamMembers(t.id))),
       Promise.all(teams.map((t) => getTeamDashboard(t.id))),
+      // Si falta la lectura de la última semana de algún equipo, se genera en segundo plano.
+      Promise.all(teams.map((t) => getTeamInsights(t.id).catch(() => [] as TeamInsight[]))),
     ]);
+    teams.forEach((t) => void ensureWeeklyInsight(t.id));
     return {
       teams,
       members: Object.fromEntries(teams.map((t, i) => [t.id, memberLists[i]])),
@@ -461,6 +529,7 @@ export async function getAdminSnapshot(): Promise<AdminSnapshot> {
       daily: overview?.daily ?? {},
       tension: overview?.tension ?? {},
       dashboards: Object.fromEntries(teams.map((t, i) => [t.id, dashboards[i]])),
+      insights: Object.fromEntries(teams.map((t, i) => [t.id, insightLists[i]])),
     };
   } catch (err) {
     throw toApiError(err);

@@ -1,7 +1,7 @@
 // Exportar historial en PDF (se genera en el navegador, igual que el informe de la administradora):
 // - "Mi historial": los registros propios de la persona (Tótem, rituales y módulos de cada ciclo).
 // - "Historial del equipo" (solo Líder): datos agregados del equipo, nunca respuestas individuales.
-import type { CycleSummary, TeamDashboard } from "../../../data/api";
+import type { CycleSummary, TeamDashboard, TeamInsight } from "../../../data/api";
 import { getGeneration } from "../../../data/catalogs";
 import type { TeamMember } from "../../../data/teamData";
 import type { Team, User } from "../../../data/types";
@@ -91,6 +91,34 @@ async function createDoc(footer: string) {
   return { text, gap, rule, heading, field, save };
 }
 
+type Pdf = Awaited<ReturnType<typeof createDoc>>;
+
+/** Lecturas semanales de la IA de un ciclo (semana 1, 2 y 3). */
+function writeInsights(pdf: Pdf, insights: TeamInsight[], cycleNumber: number, indent: number) {
+  const ofCycle = insights.filter((i) => i.cycleNumber === cycleNumber).sort((a, b) => a.week - b.week);
+  pdf.text("Lecturas de la semana (IA)", { size: 9.5, bold: true, indent });
+  if (ofCycle.length === 0) {
+    pdf.text("Aún no hay lecturas: se escriben al terminar cada semana.", { size: 9.5, color: MUTED, indent: indent + 3 });
+    return;
+  }
+  for (const item of ofCycle) {
+    pdf.text(`Semana ${item.week}`, { size: 9.5, bold: true, color: PRIMARY, indent: indent + 3 });
+    if (item.status === "ok") {
+      pdf.text(item.resumen ?? "", { size: 9.5, indent: indent + 3 });
+      pdf.gap(0.5);
+      pdf.field("Patrón principal", item.patron ?? "", indent + 3);
+      pdf.field("Sugerencia para el equipo", item.sugerencia ?? "", indent + 3);
+    } else {
+      pdf.text(item.status === "insufficient" ? "Respondieron menos de 3 personas: no hubo lectura." : "No se pudo generar.", {
+        size: 9.5,
+        color: MUTED,
+        indent: indent + 3,
+      });
+    }
+    pdf.gap(1);
+  }
+}
+
 function summaryLine(c: CycleSummary) {
   const parts = [
     c.energy !== null ? `Energía ${c.energy.toFixed(1)}/5` : "Energía: pocas respuestas",
@@ -102,7 +130,13 @@ function summaryLine(c: CycleSummary) {
 }
 
 /** PDF con los registros propios: "mi-historial-ora-AAAA-MM-DD.pdf". */
-export async function exportMyHistory(user: User, team: Team | null, history: CycleSummary[], now = new Date()) {
+export async function exportMyHistory(
+  user: User,
+  team: Team | null,
+  history: CycleSummary[],
+  insights: TeamInsight[] = [],
+  now = new Date(),
+) {
   const pdf = await createDoc("ORA · Mi historial · Privado");
   const generation = getGeneration(user.generation);
 
@@ -181,13 +215,23 @@ export async function exportMyHistory(user: User, team: Team | null, history: Cy
       pdf.field("Qué funcionó mejor", closing.funciono ?? "", 6);
       pdf.field("Me llevo", closing.intenciones.join(", "), 6);
     } else pdf.text(c.current ? "Pendiente (se abre en la semana 3)." : "Sin responder.", { size: 9.5, color: MUTED, indent: 6 });
+
+    // Lecturas del equipo (agregadas y anónimas): las mismas que ve todo el equipo en la app.
+    pdf.gap(1);
+    writeInsights(pdf, insights, c.number, 3);
   }
 
   pdf.save(`mi-historial-ora-${fileDate(now)}.pdf`);
 }
 
 /** PDF del equipo con datos agregados: "historial-equipo-ora-AAAA-MM-DD.pdf". */
-export async function exportTeamHistory(team: Team, dashboard: TeamDashboard, members: TeamMember[], now = new Date()) {
+export async function exportTeamHistory(
+  team: Team,
+  dashboard: TeamDashboard,
+  members: TeamMember[],
+  insights: TeamInsight[] = [],
+  now = new Date(),
+) {
   const pdf = await createDoc(`ORA · Historial de ${team.name}`);
   const { cycle, progress, friction, tension, minGroup } = dashboard;
   const pct = (n: number) => (dashboard.members > 0 ? Math.round((n / dashboard.members) * 100) : 0);
@@ -241,6 +285,8 @@ export async function exportTeamHistory(team: Team, dashboard: TeamDashboard, me
       color: MUTED,
     });
     pdf.text(summaryLine(c), { size: 9.5, indent: 3 });
+    pdf.gap(1.5);
+    writeInsights(pdf, insights, c.number, 3);
     pdf.gap(3);
   }
 

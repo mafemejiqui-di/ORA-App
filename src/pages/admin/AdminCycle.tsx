@@ -31,6 +31,7 @@ export function AdminCycle() {
           {teams.map((team) => {
             const status = getCycleStatus(team);
             const tension = getTensionThisWeek(snapshot, team);
+            const latest = snapshot.insights[team.id]?.[0];
             return (
               <li key={team.id} className="admin__card">
                 <div className="admin-team__head">
@@ -69,6 +70,22 @@ export function AdminCycle() {
                       ))}
                     </ul>
                   )}
+                </div>
+
+                {/* Última lectura semanal de la IA del equipo. */}
+                <div className="admin-tension">
+                  <h3 className="pattern__title pattern__title--teal">
+                    Lectura de la semana{latest ? ` · Ciclo ${latest.cycleNumber}, semana ${latest.week}` : ""}
+                  </h3>
+                  <p className="admin__caption">
+                    {!latest
+                      ? "Aún no hay lecturas: se escriben al terminar cada semana."
+                      : latest.status === "ok"
+                        ? `${latest.resumen} Sugerencia: ${latest.sugerencia}`
+                        : latest.status === "insufficient"
+                          ? "Respondieron menos de 3 personas: no hubo lectura."
+                          : "No se pudo generar; se reintentará."}
+                  </p>
                 </div>
               </li>
             );

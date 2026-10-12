@@ -3,13 +3,14 @@ import download from "../../../assets/icons/download.svg";
 import flame from "../../../assets/icons/flame.svg";
 import { useToast } from "../../../components/Toast";
 import { WeekRing } from "../../../components/WeekRing";
-import { getTeamMembers, type CycleSummary, type TeamDashboard } from "../../../data/api";
+import { getTeamInsights, getTeamMembers, type CycleSummary, type TeamDashboard } from "../../../data/api";
 import { useAuth } from "../../../state/AuthContext";
 import { useTeamDashboard } from "../../../state/useTeamDashboard";
 import { CYCLE_DAYS, CYCLE_WEEKS, days, getCycleStatus, isLeader } from "../../../utils/cycle";
 import { formatRange } from "../../../utils/format";
 import { getRitualStats, toLocalIso } from "../../../utils/ritual";
 import { AdminCycle } from "../../admin/AdminCycle";
+import { WeeklyInsight } from "./WeeklyInsight";
 import "./Cycle.css";
 
 // Mismos colores que la leyenda: Ver cómo estamos (vino), Tomar una decisión (azul), Cerrar (gris).
@@ -47,9 +48,13 @@ export function Cycle() {
     }
     setExporting(kind);
     try {
-      const { exportMyHistory, exportTeamHistory } = await import("./exportHistory");
-      if (kind === "mine") await exportMyHistory(user, team, dashboard.data.history);
-      else await exportTeamHistory(team, dashboard.data, await getTeamMembers(team.id));
+      const [{ exportMyHistory, exportTeamHistory }, insights] = await Promise.all([
+        import("./exportHistory"),
+        // Las lecturas de la IA van en los dos PDF (si no hay, el PDF sale igual).
+        getTeamInsights(team.id).catch(() => []),
+      ]);
+      if (kind === "mine") await exportMyHistory(user, team, dashboard.data.history, insights);
+      else await exportTeamHistory(team, dashboard.data, await getTeamMembers(team.id), insights);
       showToast("PDF descargado", "primary");
     } catch {
       showToast("No pudimos generar el PDF. Inténtalo de nuevo.");
@@ -129,6 +134,8 @@ export function Cycle() {
               </div>
             </ParticipationCard>
           </section>
+
+          {team && <WeeklyInsight team={team} />}
 
           <section className="cycle__block cycle__block--history" aria-labelledby="cycle-history-label">
             <h2 className="section-label" id="cycle-history-label">
