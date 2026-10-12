@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import chevronUp from "../../../assets/icons/chevron-up.svg";
 import { ensureWeeklyInsight, getTeamInsights, type TeamInsight } from "../../../data/api";
 import type { Team } from "../../../data/types";
 import { days } from "../../../utils/cycle";
@@ -37,15 +38,32 @@ function InsightBody({ insight }: { insight: TeamInsight }) {
   return (
     <>
       <p className="insight__summary">{insight.resumen}</p>
-      <div className="insight__block">
-        <span className="insight__label">Patrón principal</span>
-        <p className="insight__text">{insight.patron}</p>
-      </div>
-      <div className="insight__block insight__block--suggestion">
-        <span className="insight__label">Sugerencia para el equipo</span>
-        <p className="insight__text">{insight.sugerencia}</p>
-      </div>
+      <InsightToggle label="Patrón principal" text={insight.patron} />
+      <InsightToggle label="Sugerencia para el equipo" text={insight.sugerencia} variant="suggestion" />
     </>
+  );
+}
+
+/** Bloque plegado con flecha: al tocarlo se despliega su texto. */
+function InsightToggle({ label, text, variant }: { label: string; text: string | null; variant?: "suggestion" }) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  return (
+    <div className={variant ? `insight__block insight__block--${variant}` : "insight__block"}>
+      <button
+        type="button"
+        className="insight__toggle"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span className="insight__label">{label}</span>
+        <img className={open ? "insight__chevron is-open" : "insight__chevron"} src={chevronUp} width={14} height={14} alt="" />
+      </button>
+      <p className="insight__text" id={id} hidden={!open}>
+        {text}
+      </p>
+    </div>
   );
 }
 
@@ -97,8 +115,6 @@ export function WeeklyInsight({ team }: { team: Team }) {
           </ul>
         </details>
       )}
-
-      <p className="insight__footer">Escrita con IA (Gemini) a partir de datos anónimos del equipo.</p>
     </section>
   );
 }

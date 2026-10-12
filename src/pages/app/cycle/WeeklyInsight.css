@@ -43,9 +43,39 @@
 
 .insight__block {
   margin-top: 12px;
-  padding: 10px 12px;
   border-radius: 12px;
   background: var(--color-warm-soft);
+}
+
+/* Toda la franja es tocable: despliega o pliega el texto. */
+.insight__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.insight__toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* El ícono es una flecha hacia arriba: plegado se gira para apuntar hacia abajo. */
+.insight__chevron {
+  flex: none;
+  transform: rotate(180deg);
+  transition: transform 200ms ease;
+}
+
+.insight__chevron.is-open {
+  transform: rotate(0deg);
 }
 
 .insight__block--suggestion {
@@ -66,7 +96,8 @@
 }
 
 .insight__text {
-  margin: 2px 0 0;
+  margin: 0;
+  padding: 0 12px 10px;
   color: var(--color-text-strong);
   font-size: 13px;
   line-height: 19.5px;
@@ -103,11 +134,4 @@
 .insight__older-item {
   padding-top: 12px;
   border-top: 1px solid rgba(211, 209, 199, 0.5);
-}
-
-.insight__footer {
-  margin: 12px 0 0;
-  color: var(--color-text-muted);
-  font-size: 10px;
-  line-height: 15px;
 }
