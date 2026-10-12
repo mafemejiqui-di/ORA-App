@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#fcf1ec" />
+    <title>ORA</title>
+    <!-- Web app instalable: ícono y nombre al anclarla a la pantalla de inicio. -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32.png?v=2" />
+    <!-- El ícono va dentro de la página: iOS no siempre lo descarga por http en la red local. -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="ORA" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  </head>
+  <body>
+    <!--
+      Fondo vino del splash mientras carga la app (solo en la app instalada o en la vista previa):
+      así no se ve un destello beige antes de la animación. Splash.tsx lo quita al montarse.
+    -->
+    <div id="boot-splash" style="position: fixed; inset: 0; z-index: 999; background: #6d0d1d"></div>
+    <script>
+      (function () {
+        var installed =
+          window.navigator.standalone === true || window.matchMedia("(display-mode: standalone)").matches;
+        var preview = false;
+        try {
+          preview = new URLSearchParams(location.search).get("vista") === "app" || localStorage.getItem("ora.previewInBrowser") === "1";
+          if (new URLSearchParams(location.search).get("vista") === "instructivo") preview = false;
+        } catch (e) {}
+        if (!installed && !preview) document.getElementById("boot-splash").remove();
+      })();
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

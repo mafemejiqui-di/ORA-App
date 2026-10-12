@@ -1,0 +1,235 @@
+/* En Figma la leyenda invade el relleno inferior: la tarjeta mide 240 px. */
+.dotmap {
+  padding: 20px 20px 9px;
+}
+
+.dotmap__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 24px;
+}
+
+.dotmap__title {
+  margin: 0;
+  color: var(--color-rose-dark);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 19.5px;
+}
+
+.dotmap__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.dotmap__toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.dotmap__badge {
+  color: var(--color-brand-dark);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  line-height: 15px;
+  text-transform: uppercase;
+}
+
+.dotmap__chevron {
+  transition: transform 150ms ease;
+}
+
+.dotmap__chevron.is-collapsed {
+  transform: rotate(180deg);
+}
+
+.dotmap__columns {
+  display: flex;
+  margin-top: 12px;
+  padding-left: 80px;
+}
+
+.dotmap__column {
+  flex: 1;
+  color: var(--color-text-muted);
+  font-size: 9px;
+  letter-spacing: 0.54px;
+  line-height: 16px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.dotmap__rows {
+  padding-top: 4px;
+}
+
+.dotmap__row {
+  display: flex;
+  align-items: center;
+  height: 46px;
+}
+
+.dotmap__row + .dotmap__row {
+  border-top: 0.5px solid rgba(211, 209, 199, 0.4);
+}
+
+.dotmap__row-label {
+  flex: none;
+  width: 80px;
+  padding-right: 8px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 13.75px;
+}
+
+.dotmap__cell {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  display: inline-block;
+  flex: none;
+  border-radius: 50%;
+}
+
+/*
+ * Los círculos de tensión media y alta "respiran": crecen un poco y se aclaran al
+ * inhalar. Cada nivel tiene su propio ritmo (la tensión alta es más marcada y
+ * rápida) y cada círculo arranca en un punto distinto del ciclo (--breath-delay,
+ * desde el TSX). Los de "sin datos" se quedan quietos.
+ */
+/* Sin datos: solo el contorno de un círculo pequeño. */
+.dot--none {
+  box-sizing: border-box;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+}
+
+/* Tensión baja: hay datos, pero el grupo está tranquilo (punto gris quieto, sin respirar). */
+.dot--low {
+  width: 8px;
+  height: 8px;
+  background: var(--color-border);
+  opacity: 0.5;
+}
+
+.dot--medium {
+  --dot-opacity: 0.65;
+  --breath-scale: 1.12;
+  --breath-lift: 0.12;
+  --breath-duration: 4.2s;
+
+  width: 14px;
+  height: 14px;
+  background: var(--color-primary);
+}
+
+.dot--high {
+  --dot-opacity: 0.9;
+  --breath-scale: 1.16;
+  --breath-lift: 0.1;
+  --breath-duration: 3.4s;
+
+  width: 22px;
+  height: 22px;
+  background: var(--color-rose-dark);
+}
+
+.dotmap__row.is-pending .dot--none {
+  opacity: 0.35;
+}
+
+.dot--medium,
+.dot--high {
+  opacity: var(--dot-opacity);
+  animation: dot-breathe var(--breath-duration) ease-in-out var(--breath-delay, 0s) infinite;
+}
+
+@keyframes dot-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: var(--dot-opacity);
+  }
+  50% {
+    transform: scale(var(--breath-scale));
+    opacity: calc(var(--dot-opacity) + var(--breath-lift));
+  }
+}
+
+.dotmap__legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 25px;
+  margin: 0;
+  padding: 8px 0 0;
+  list-style: none;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 16.5px;
+}
+
+.dotmap__legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot--legend-high {
+  width: 10px;
+  height: 10px;
+  background: var(--color-rose-dark);
+}
+
+.dot--legend-medium {
+  width: 7px;
+  height: 7px;
+  background: var(--color-primary);
+  opacity: 0.65;
+}
+
+.dot--legend-low {
+  width: 5px;
+  height: 5px;
+  background: var(--color-border);
+}
+
+.dotmap__note {
+  margin: 4px 0 0;
+  color: var(--color-text-muted);
+  font-size: 9.5px;
+  line-height: 14px;
+}
+
+.dot--legend-none {
+  box-sizing: border-box;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dotmap__chevron {
+    transition: none;
+  }
+
+  .dot--medium,
+  .dot--high {
+    animation: none;
+  }
+}

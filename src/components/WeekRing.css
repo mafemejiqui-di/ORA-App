@@ -1,0 +1,75 @@
+.week-ring {
+  --dot-size: 36px;
+  --ring-radius: 68px;
+  /* Pausa entre un círculo y el siguiente: la ola da la vuelta completa en un ciclo. */
+  --breath-step: 0.32s;
+  --breath-duration: calc(var(--breath-step) * var(--week-count));
+
+  position: relative;
+  width: calc(var(--ring-radius) * 2 + var(--dot-size));
+  height: calc(var(--ring-radius) * 2 + var(--dot-size));
+  margin: 4px auto 0;
+}
+
+/* Variante de un círculo por día (21 en el ciclo): círculos más pequeños. */
+.week-ring--compact {
+  --dot-size: 14px;
+  --ring-radius: 74px;
+  --breath-step: 0.14s;
+}
+
+/* Cada semana se ubica girando desde arriba en el sentido del reloj. */
+.week-ring__slot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  margin: calc(var(--dot-size) / -2) 0 0 calc(var(--dot-size) / -2);
+  transform: rotate(var(--angle)) translateY(calc(var(--ring-radius) * -1)) rotate(calc(var(--angle) * -1));
+}
+
+.week-ring__dot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  /* Retraso negativo: la secuencia ya va en marcha al abrir la pantalla. */
+  animation: week-breathe var(--breath-duration) ease-in-out infinite;
+  animation-delay: calc(var(--breath-step) * var(--index) - var(--breath-duration));
+}
+
+.week-ring__dot.is-pending {
+  border: 1.5px solid var(--color-border);
+  background: transparent;
+}
+
+@keyframes week-breathe {
+  0%,
+  45%,
+  100% {
+    opacity: 0.85;
+    transform: scale(0.88);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+.week-ring__value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--color-brand-dark);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 32px;
+  transform: translate(-50%, -50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .week-ring__dot {
+    animation: none;
+  }
+}

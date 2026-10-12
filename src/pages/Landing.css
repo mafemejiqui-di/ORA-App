@@ -1,0 +1,110 @@
+.landing {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+/* Círculos decorativos: posiciones tomadas del frame de 393 px de Figma. */
+.landing__circles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.landing__circle {
+  position: absolute;
+  max-width: none;
+}
+
+.landing__circle--rose-267 {
+  left: -136px;
+  top: 247px;
+}
+
+.landing__circle--rose-318 {
+  left: 176px;
+  top: 101px;
+}
+
+.landing__circle--teal-331 {
+  left: -102px;
+  top: -150px;
+}
+
+.landing__circle--teal-265 {
+  left: 253px;
+  top: 260px;
+}
+
+.landing__header,
+.landing__footer {
+  position: relative;
+  z-index: 1;
+}
+
+.landing__header {
+  padding: 34px 20px 0;
+}
+
+.landing__phase {
+  margin: 0;
+  color: var(--color-brand-dark);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 31.2px;
+}
+
+.landing__phase-number {
+  opacity: 0.4;
+}
+
+.landing__tagline {
+  margin: 0;
+  padding-top: 8px;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--color-text);
+}
+
+.landing__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-top: auto;
+  padding: 0 20px calc(83px + env(safe-area-inset-bottom, 0px));
+}
+
+.landing__logo {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 272 / 110;
+  object-fit: contain;
+}
+
+.landing__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* La nota cuelga bajo el botón sin empujar el layout, como en Figma. */
+.landing__login {
+  position: relative;
+}
+
+.landing__note {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 7px 0 0;
+  font-size: 12px;
+  line-height: 16.5px;
+  text-align: center;
+  color: var(--color-text-muted);
+}

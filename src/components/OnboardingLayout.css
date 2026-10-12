@@ -1,0 +1,87 @@
+.onboarding {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.onboarding__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--screen-top) 20px 16px;
+}
+
+.onboarding__back {
+  display: flex;
+  padding: 4px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.onboarding__back:focus-visible {
+  outline: 2px solid var(--color-primary);
+  border-radius: 6px;
+}
+
+/* Chevron azul: sin empujar el contenido, y con el trazo alineado al margen. */
+.onboarding__back-chevron {
+  margin: -10px 0 -10px -15px;
+}
+
+.onboarding__step {
+  margin-left: auto;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19.5px;
+}
+
+.onboarding__content {
+  flex: 1;
+  padding: 0 20px 24px;
+}
+
+.onboarding__footer--bar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 19.92px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  border-top: 1.156px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.onboarding__footer--plain {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 20px calc(40px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Títulos y textos que repiten los pasos del registro */
+.onboarding__eyebrow {
+  margin: 0;
+  color: var(--color-brand-dark);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.88px;
+  line-height: 16.5px;
+  text-transform: uppercase;
+}
+
+.onboarding__lead {
+  margin: 4px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19.5px;
+}
+
+.onboarding__question {
+  margin: 0;
+  color: var(--color-text-strong);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}

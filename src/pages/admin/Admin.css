@@ -1,0 +1,344 @@
+/* Pantallas de la administradora (Inicio, Ciclo y Equipo). */
+.admin {
+  /* Deja libre el espacio de la barra de navegación y su burbuja. */
+  padding-bottom: 128px;
+}
+
+.admin__header {
+  padding: var(--screen-top) 20px 20px;
+}
+
+.admin__title {
+  margin: 0;
+  color: var(--color-brand-dark);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 33px;
+}
+
+.admin__sub {
+  margin: 2px 0 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* Mismo estilo que "Exportar mi historial" de la pantalla Ciclo. */
+.admin__export {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.admin__export:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.admin__export:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.admin__section {
+  padding: 0 20px;
+}
+
+.admin__section + .admin__section {
+  padding-top: 28px;
+}
+
+.admin__section > .section-label {
+  margin-bottom: 12px;
+}
+
+.admin__caption {
+  margin: -8px 0 12px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.admin__caption--inline {
+  margin: 12px 0 0;
+}
+
+.admin__card {
+  padding: 16px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-panel);
+  background: #fff;
+}
+
+.admin__retry {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin__empty {
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19.5px;
+  text-align: center;
+}
+
+/* Cifras principales. */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.admin-stat {
+  padding: 12px;
+  border-radius: var(--radius-card);
+  background: var(--color-surface-soft);
+}
+
+.admin-stat__value {
+  display: block;
+  color: var(--color-text-strong);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.admin-stat__label {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 15px;
+}
+
+/* Equipo con sus integrantes. */
+.admin-teams {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-team__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.admin-team__name {
+  margin: 0;
+  color: var(--color-text-strong);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.admin-team__meta {
+  flex: none;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.admin-members {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-member {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-member .avatar {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  font-size: 11px;
+}
+
+.admin-member__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-member__name {
+  display: block;
+  overflow: hidden;
+  color: var(--color-text-strong);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-member__role {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 15px;
+}
+
+.admin-member__status {
+  flex: none;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 15px;
+}
+
+.admin-member__status.is-alert {
+  color: var(--color-amber-text);
+  font-weight: 500;
+}
+
+/* Alertas: ícono + texto, nunca solo color. */
+.admin-alerts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-left: 4px solid var(--color-amber-text);
+  border-radius: 12px;
+  background: var(--color-amber-soft);
+}
+
+.admin-alert__icon {
+  flex: none;
+  color: var(--color-amber-text);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.admin-alert__text {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-strong);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.admin-alert__detail {
+  display: block;
+  color: var(--color-text);
+  font-size: 11px;
+  line-height: 15px;
+}
+
+/* Equipo desplegable (Ciclo y Equipo). */
+.admin-accordion__toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-accordion__toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.admin-accordion__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-accordion__chevron {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+  transform: rotate(45deg);
+  transition: transform 200ms ease;
+}
+
+.admin-accordion__toggle[aria-expanded="true"] .admin-accordion__chevron {
+  transform: rotate(-135deg);
+}
+
+.admin-accordion__panel {
+  margin-top: 14px;
+}
+
+/* Semana del ciclo (Ciclo). */
+.admin-week {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.admin-week__step {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+}
+
+.admin-week__step strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.admin-week__step.is-current {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.admin-tension {
+  margin-top: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-accordion__chevron {
+    transition: none;
+  }
+}

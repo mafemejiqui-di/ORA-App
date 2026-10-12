@@ -1,0 +1,381 @@
+.cycle {
+  /* Deja libre el espacio de la barra de navegación y su burbuja. */
+  padding-bottom: 128px;
+}
+
+.cycle__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--screen-top) 20px 16px;
+}
+
+.cycle__title {
+  margin: 0;
+  color: var(--color-brand-dark);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 33px;
+}
+
+.cycle__badge {
+  padding: 6px 12px;
+  border: 1.127px solid var(--color-warm-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-warm-soft);
+  color: var(--color-brand-dark);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.cycle__block {
+  padding: 0 20px;
+}
+
+.cycle__block > .section-label {
+  margin-bottom: 12px;
+}
+
+.cycle__block--history {
+  padding-top: 32px;
+}
+
+/* Avance del ciclo */
+.cycle-progress {
+  padding: 20px;
+  border-radius: var(--radius-panel);
+  background: var(--color-teal-tint);
+}
+
+.cycle-progress__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cycle-progress__title {
+  color: var(--color-brand-dark);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 22.5px;
+}
+
+.cycle-progress__week {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19.5px;
+}
+
+.cycle-progress__bar {
+  height: 6px;
+  margin-top: 12px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.cycle-progress__elapsed {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--color-bg);
+}
+
+.cycle-progress__left {
+  margin: 0;
+  padding-top: 4px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+  text-align: right;
+}
+
+/* Gráfico circular + leyenda + ritual */
+.ring-card {
+  margin-top: 12px;
+  padding: 20px 20px 20px;
+}
+
+.ring-card__caption {
+  margin: 8px 0 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.cycle__empty {
+  margin: 0;
+  padding: 20px;
+  border: 1.127px dashed var(--color-border);
+  border-radius: 14px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19.5px;
+  text-align: center;
+}
+
+.ring-legend {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  justify-content: space-between;
+  column-gap: 12px;
+  margin: 28px 0 0;
+  padding: 0 0 0 9px;
+  list-style: none;
+}
+
+.ring-legend__item {
+  display: flex;
+  flex-direction: column;
+  min-height: 36px;
+}
+
+.ring-legend__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-strong);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15px;
+  white-space: nowrap;
+}
+
+.ring-legend__item--pending .ring-legend__label {
+  opacity: 0.5;
+}
+
+.ring-legend__dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.ring-legend__dot--rose {
+  background: var(--color-rose-dark);
+}
+
+.ring-legend__dot--teal {
+  background: var(--color-primary);
+}
+
+.ring-legend__dot--gray {
+  background: var(--color-border);
+}
+
+.ring-legend__value {
+  padding: 2px 0 0 18px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 19.5px;
+}
+
+.ring-legend__value--rose {
+  color: var(--color-rose-dark);
+}
+
+.ring-legend__value--teal {
+  color: var(--color-primary);
+}
+
+.ring-legend__value--pending {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.ring-ritual {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 17px;
+  padding-top: 16px;
+  border-top: 1.129px solid rgba(211, 209, 199, 0.3);
+}
+
+.ring-ritual__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ring-ritual__title {
+  color: var(--color-brand-dark);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  white-space: nowrap;
+}
+
+.ring-ritual__days {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+.ring-ritual__meter {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+}
+
+.ring-ritual__bar {
+  width: 80px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.ring-ritual__fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+}
+
+.ring-ritual__percent {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 16.5px;
+}
+
+/* Historial de ciclos */
+.cycle-history {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cycle-card {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(241, 239, 232, 0.2);
+}
+
+.cycle-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cycle-card__title {
+  color: var(--color-brand-dark);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 21px;
+}
+
+.cycle-card__dates {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.cycle-card__side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.cycle-card__state {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  line-height: 15px;
+  text-transform: uppercase;
+}
+
+.cycle-card__state--done {
+  color: var(--color-primary);
+}
+
+/* Ciclo terminado: vidrio arenado (esmerilado + grano), igual que las tarjetas de atrás del carrusel de Inicio. */
+.cycle-card--done {
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0 0.38 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(241, 239, 232, 0.5));
+  box-shadow: 0 6px 18px rgba(113, 43, 19, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+/* Ciclo en curso: borde azul y vidrio arenado azul translúcido (misma textura que los terminados). */
+.cycle-card--active {
+  border: 1.5px solid var(--color-primary);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.52 0 0 0 0 0.59 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(145deg, rgba(21, 132, 151, 0.16), rgba(21, 132, 151, 0.06));
+  box-shadow: 0 6px 18px rgba(21, 132, 151, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+.cycle-card--active .cycle-card__state {
+  color: var(--color-primary);
+}
+
+/* Energía, fricción, decisiones y clima de cierre del ciclo (calculados por la base de datos). */
+.cycle-card__stats {
+  margin: 8px 0 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.cycle-card--upcoming {
+  padding: 16px;
+  border: 1.127px dashed var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 19.5px;
+  opacity: 0.5;
+  text-align: center;
+}
+
+/* Exportar historial */
+.cycle-export {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding-top: 20px;
+}
+
+.cycle-export__button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.cycle-export__button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.cycle-export__button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}

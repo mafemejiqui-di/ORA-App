@@ -1,0 +1,146 @@
+.profile {
+  /* Deja libre el espacio de la barra de navegación y su burbuja. */
+  padding-bottom: 128px;
+}
+
+.profile__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--screen-top) 20px 0;
+}
+
+.profile__name {
+  margin: 8px 0 0;
+  color: var(--color-rose-dark);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
+  text-align: center;
+}
+
+.profile__role {
+  margin: 8px 0 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+}
+
+.profile__logo {
+  margin-top: 8px;
+  object-fit: contain;
+}
+
+.settings__logout:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.profile__section {
+  padding: 28px 20px 0;
+}
+
+.profile__hero + .profile__section {
+  padding-top: 24px;
+}
+
+.profile__section > .section-label {
+  margin-bottom: 12px;
+}
+
+.profile__section--settings > .section-label {
+  margin-bottom: 8px;
+}
+
+/* Tótem activo */
+.profile-totem {
+  padding: 20px;
+  border-radius: var(--radius-panel);
+  background: rgba(241, 239, 232, 0.2);
+}
+
+.profile-totem__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-totem__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-rose-dark);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+}
+
+.profile-totem__cycle {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.profile-totem__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-totem__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-totem__value {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text);
+  font-size: 14px;
+  font-style: italic;
+  line-height: 19.25px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Ajustes */
+.settings {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.settings__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  border-bottom: 1.156px solid var(--color-border);
+}
+
+.settings__row--last {
+  border-bottom: 0;
+}
+
+.settings__label {
+  color: var(--color-text-strong);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.settings__logout {
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  cursor: pointer;
+}

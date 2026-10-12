@@ -1,0 +1,49 @@
+/* Design tokens extraídos del archivo de Figma "Ora - App 2". */
+:root {
+  --color-bg: #fcf1ec;
+  --color-bg-outer: #faf9f7;
+  --color-primary: #158497;
+  --color-on-primary: #ffffff;
+  --color-brand-dark: #712b13;
+  --color-rose: #73171a;
+  --color-text: #5f5e5a;
+  --color-text-strong: #1a1a13;
+  --color-text-muted: #888780;
+  --color-border: #d3d1c7;
+  --color-surface-soft: #f1efe8;
+  --color-border-soft: #e5e3dc;
+  --color-teal-tint: rgba(21, 132, 151, 0.2);
+  --color-teal-soft: #e1f5ee;
+  --color-warm-soft: #faece7;
+  --color-warm-border: #993c1d;
+  --color-teal-pill: #e0f4f7;
+  --color-teal-deep: #085041;
+  --color-amber-soft: #faeeda;
+  --color-amber-text: #854f0b;
+  --color-rose-dark: #74171a;
+
+  --font-sans: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --radius-input: 10px;
+  --radius-button: 14px;
+  --radius-card: 14px;
+  --radius-panel: 16px;
+  --radius-pill: 999px;
+
+  /* Ancho de referencia del diseño móvil en Figma (columna centrada en computador y tableta). */
+  --app-max-width: 393px;
+
+  /*
+   * Margen superior de los títulos de cada pantalla. En Figma (56–64 px) incluía la barra de estado;
+   * instalada, la app ya empieza debajo de ella, así que basta un margen corto más la zona segura
+   * del dispositivo (notch, Dynamic Island) cuando la haya.
+   */
+  --screen-top: calc(24px + env(safe-area-inset-top, 0px));
+}
+
+/* En el celular la app ocupa todo el ancho de la pantalla, sea cual sea el modelo. */
+@media (max-width: 599px) {
+  :root {
+    --app-max-width: 100%;
+  }
+}

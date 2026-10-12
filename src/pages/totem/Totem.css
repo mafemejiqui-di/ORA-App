@@ -1,0 +1,141 @@
+/* Sección Tótem: botones con radio 12 y línea de pie más clara que en el registro. */
+.totem .btn {
+  border-radius: 12px;
+}
+
+.totem .onboarding__footer--bar {
+  border-top-color: var(--color-border-soft);
+}
+
+.totem__eyebrow {
+  margin: 20px 0 0;
+  color: var(--color-brand-dark);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.1px;
+  line-height: 16.5px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.totem__title {
+  max-width: 300px;
+  margin: 20px 0 0;
+  color: var(--color-text-strong);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 31.2px;
+  text-align: center;
+}
+
+.totem__lead {
+  max-width: 300px;
+  margin: 12px 0 0;
+  color: var(--color-text);
+  font-size: 15px;
+  line-height: 24px;
+  text-align: center;
+}
+
+/* Intro y cierre: bloque centrado en pantalla */
+.totem-centered {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 0 20px;
+  overflow: hidden;
+}
+
+/* El contenido va por encima de los círculos de fondo. */
+.totem-centered > :not(.circle-backdrop) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Botón de volver de la introducción: misma posición que en las preguntas. */
+.totem-centered > .totem-intro__back {
+  position: absolute;
+  top: 46px;
+  left: 5px;
+}
+
+.totem-centered__cta {
+  max-width: 320px;
+  margin-top: 36.6px;
+}
+
+.totem-centered--done .totem__eyebrow {
+  margin-top: 16px;
+}
+
+.totem-centered--done .totem__title {
+  margin-top: 16px;
+}
+
+.totem-done__summary {
+  width: 100%;
+  max-width: 320px;
+  margin: 16px 0 0;
+  padding: 20px;
+  list-style: none;
+  border-radius: var(--radius-panel);
+  background: var(--color-teal-tint);
+}
+
+.totem-done__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.totem-done__row + .totem-done__row {
+  margin-top: 12px;
+}
+
+.totem-done__value {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 18.2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.totem-done__cta {
+  margin-top: 24px;
+}
+
+/* Preguntas */
+.totem-question__tag {
+  margin-bottom: 20px;
+}
+
+.totem-question__title {
+  max-width: 320px;
+  margin: 0 0 20px;
+  color: var(--color-text-strong);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 30.8px;
+}
+
+.totem-field + .totem-field {
+  margin-top: 26.64px;
+}
+
+.totem-field__label {
+  display: block;
+  margin-bottom: 8.5px;
+  color: var(--color-text-strong);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 19.5px;
+}
+
+.totem-question__progress {
+  margin-top: 26.64px;
+}

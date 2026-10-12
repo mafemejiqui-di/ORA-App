@@ -1,0 +1,77 @@
+/* Pasos 1 a 3 del registro */
+
+.register__privacy {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19.5px;
+}
+
+.register__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+/* Paso 2 */
+.register__question {
+  margin-top: 4px;
+}
+
+.register__question--gap {
+  margin-top: 20px;
+}
+
+.register__roles {
+  margin: 13px -5px 0 -5px;
+}
+
+.register__generations {
+  margin-top: 12px;
+}
+
+/* Paso 3 */
+.register__lead--team {
+  margin-top: 8px;
+}
+
+.register__org {
+  margin-top: 24px;
+}
+
+.register__divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.register__divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.register__divider-text {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19.5px;
+}
+
+.register__team-code {
+  margin-top: 24px;
+}
+
+.register__skip {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.register__form-error {
+  margin-top: 16px;
+}

@@ -1,0 +1,60 @@
+import { useNavigate } from "react-router-dom";
+import { Avatar } from "../../../components/Avatar";
+import { StreakTracker } from "../../../components/StreakTracker";
+import { getQuestionForDate } from "../../../data/ritual";
+import { useAuth } from "../../../state/AuthContext";
+import { useTeamDashboard } from "../../../state/useTeamDashboard";
+import { getRitualStats } from "../../../utils/ritual";
+import { AdminHome } from "../../admin/AdminHome";
+import { DotMap } from "./DotMap";
+import { ModuleCarousel } from "./ModuleCarousel";
+import "./Home.css";
+
+export function Home() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  // Patrones del equipo en vivo (vacío sin equipo; la administradora tiene su propia vista).
+  const dashboard = useTeamDashboard();
+
+  if (!user) return null;
+  // La administradora ve todos los equipos, su uso y alertas.
+  if (user.isAdmin) return <AdminHome />;
+
+  const now = new Date();
+  const stats = getRitualStats(user, now);
+  const ritualDone = stats.completedToday;
+
+  return (
+    <main className="home">
+      <header className="home__header">
+        <div className="home__greeting">
+          <div className="home__identity">
+            <h1 className="home__title">Hola, {user.name}</h1>
+            {user.role && <p className="home__role">{user.role}</p>}
+          </div>
+          <Avatar name={user.name} />
+        </div>
+      </header>
+
+      <StreakTracker currentStreak={stats.streak} record={stats.record} weekDots={stats.weekDots} />
+
+      <div className="home__section home__ritual-wrap">
+        <button type="button" className="home__ritual" onClick={() => navigate("/ritual")}>
+          <span className="home__ritual-text">
+            <span className="home__ritual-title">Ritual diario</span>
+            <span className="home__ritual-prompt">{getQuestionForDate(now)}</span>
+          </span>
+          <span className="home__ritual-link">{ritualDone ? "Ver respuestas" : "Responder ahora"}</span>
+        </button>
+      </div>
+
+      <div className="home__section">
+        <DotMap dashboard={dashboard.data} />
+      </div>
+
+      <div className="home__carousel">
+        <ModuleCarousel />
+      </div>
+    </main>
+  );
+}

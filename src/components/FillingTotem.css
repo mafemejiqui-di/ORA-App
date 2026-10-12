@@ -1,0 +1,54 @@
+.filling-totem {
+  position: relative;
+  display: block;
+  /* Un pequeño asentamiento cuando termina de llenarse. */
+  animation: filling-totem-settle 420ms ease-out 1500ms both;
+}
+
+.filling-totem svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: visible;
+}
+
+/*
+ * El relleno se revela con un recorte que sube desde la base (y = 52 de 64) hasta
+ * la punta (y = 6 de 64), así el llenado empieza y termina justo en el triángulo.
+ */
+.filling-totem__fill {
+  clip-path: inset(82% 0 0 0);
+  animation: filling-totem-rise 1150ms cubic-bezier(0.45, 0, 0.25, 1) 350ms both;
+}
+
+@keyframes filling-totem-rise {
+  from {
+    clip-path: inset(82% 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes filling-totem-settle {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filling-totem,
+  .filling-totem__fill {
+    animation: none;
+  }
+
+  .filling-totem__fill {
+    clip-path: none;
+  }
+}

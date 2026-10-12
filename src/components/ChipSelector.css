@@ -1,0 +1,59 @@
+.chip-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip-selector .chip {
+  height: 40px;
+  padding: 0 14px;
+  font-size: 13px;
+  transition: transform 150ms ease;
+}
+
+.chip-selector .chip:active {
+  transform: scale(0.95);
+  transition-duration: 80ms;
+}
+
+.chip-selector .chip.is-selected {
+  border-width: 1.5px;
+  font-weight: 500;
+}
+
+.chip-selector--primary .chip.is-selected {
+  background: var(--color-teal-soft);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.chip-selector--burgundy .chip.is-selected {
+  background: var(--color-warm-soft);
+  border-color: var(--color-rose-dark);
+  color: var(--color-rose-dark);
+}
+
+/* Tope de selección alcanzado: las opciones restantes quedan atenuadas. */
+.chip-selector .chip:disabled {
+  cursor: default;
+}
+
+.chip-selector:not(.is-readonly) .chip:disabled {
+  opacity: 0.45;
+}
+
+/* Solo lectura: resalta lo elegido y atenúa el resto. */
+.chip-selector.is-readonly .chip {
+  cursor: default;
+  transform: none;
+}
+
+.chip-selector.is-readonly .chip:not(.is-selected) {
+  opacity: 0.45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip-selector .chip {
+    transition: none;
+  }
+}

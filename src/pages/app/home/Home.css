@@ -1,0 +1,112 @@
+.home {
+  /* Deja libre el espacio de la barra de navegación y su burbuja. */
+  padding-bottom: 128px;
+}
+
+.home__header {
+  padding: var(--screen-top) 20px 24px;
+}
+
+.home__greeting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.home__identity {
+  min-width: 0;
+}
+
+.home__role {
+  margin: 2px 0 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.home__title {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--color-brand-dark);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 33px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home__section {
+  padding: 0 20px;
+}
+
+/* La racha del ritual va justo encima de los patrones del equipo. */
+.home .streak {
+  margin: 0 20px 20px;
+}
+
+.home__carousel {
+  padding-top: 20px;
+}
+
+/* Va justo debajo de la racha, antes de los patrones del equipo. */
+.home__ritual-wrap {
+  padding-bottom: 20px;
+}
+
+.home__ritual {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: var(--radius-panel);
+  background: var(--color-warm-soft);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  cursor: pointer;
+}
+
+.home__ritual:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.home__ritual-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.home__ritual-title {
+  display: block;
+  color: var(--color-brand-dark);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.home__ritual-prompt {
+  display: block;
+  padding-top: 4px;
+  overflow: hidden;
+  color: var(--color-text);
+  font-size: 12px;
+  line-height: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home__ritual-link {
+  flex: none;
+  width: 95px;
+  margin-left: 16px;
+  color: var(--color-brand-dark);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-position: from-font;
+}

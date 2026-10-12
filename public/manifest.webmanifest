@@ -1,0 +1,17 @@
+{
+  "name": "ORA",
+  "short_name": "ORA",
+  "description": "Liderazgo con conciencia: ciclos, tótem y ritual diario para tu equipo.",
+  "lang": "es",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fcf1ec",
+  "theme_color": "#fcf1ec",
+  "icons": [
+    { "src": "/icons/icon-192.png?v=2", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png?v=2", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

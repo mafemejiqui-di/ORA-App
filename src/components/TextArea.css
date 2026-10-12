@@ -1,0 +1,45 @@
+.textarea {
+  display: block;
+  width: 100%;
+  padding: 17.156px;
+  border: 1.156px solid var(--color-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-strong);
+  /* 16 px como mínimo: con menos, el iPhone hace zoom al tocar el campo. */
+  font-size: 16px;
+  line-height: 24px;
+  resize: none;
+}
+
+.textarea--tall {
+  height: 180px;
+}
+
+.textarea--short {
+  height: 100px;
+}
+
+.textarea::placeholder {
+  color: var(--color-text-muted);
+  font-style: italic;
+  opacity: 1;
+}
+
+.textarea[aria-invalid="true"] {
+  border-color: var(--color-rose);
+}
+
+.textarea__msg {
+  margin: 6px 0 0;
+  padding-left: 4px;
+  color: var(--color-rose);
+  font-size: 12px;
+  line-height: 16.5px;
+}
+
+.textarea:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}

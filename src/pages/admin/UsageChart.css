@@ -1,0 +1,245 @@
+.usage {
+  --usage-bar: var(--color-primary);
+  --usage-spread: var(--color-rose-dark);
+  --usage-gap: 3px;
+}
+
+.usage__plot {
+  position: relative;
+  height: 128px;
+  margin: 18px 0 0 30px;
+}
+
+/* Rejilla y ejes recesivos. */
+.usage__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.usage__gridline {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 0;
+  border-top: 1px dashed rgba(211, 209, 199, 0.7);
+}
+
+/* La etiqueta del valor queda a la izquierda, fuera del área de barras. */
+.usage__gridlabel {
+  position: absolute;
+  top: -6px;
+  left: -30px;
+  color: var(--color-text-muted);
+  font-size: 9px;
+  line-height: 11px;
+}
+
+.usage__gridline--base {
+  border-top: 1px solid var(--color-border);
+}
+
+.usage__columns {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+}
+
+/* Toda la columna es la zona de toque, más grande que la barra. */
+.usage__column {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  padding: 0 var(--usage-gap);
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.usage__column:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -1px;
+  border-radius: 6px;
+}
+
+.usage__bar {
+  width: 100%;
+  max-width: 14px;
+  border-radius: 4px 4px 0 0;
+  background: var(--usage-bar);
+  transition: opacity 150ms ease;
+}
+
+.usage__columns:has(.is-hovered) .usage__column:not(.is-hovered) .usage__bar {
+  opacity: 0.45;
+}
+
+/* Tooltip: el valor manda, la etiqueta acompaña. */
+.usage__tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 150px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.usage__tooltip-value {
+  color: var(--color-text-strong);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.usage__tooltip-row,
+.usage__tooltip-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  line-height: 15px;
+}
+
+.usage__tooltip-date {
+  padding-top: 2px;
+  color: var(--color-text);
+}
+
+/* Franja de diferencias, alineada columna a columna con las barras. */
+.usage__strip,
+.usage__flags,
+.usage__axis {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  margin-left: 30px;
+}
+
+.usage__strip {
+  gap: 2px;
+  margin-top: 10px;
+}
+
+.usage__cell {
+  height: 16px;
+  border-radius: 4px;
+  background: var(--usage-spread);
+}
+
+.usage__cell.is-hovered {
+  outline: 2px solid var(--color-text-strong);
+  outline-offset: 1px;
+}
+
+.usage__flags {
+  height: 12px;
+}
+
+.usage__flag {
+  color: var(--usage-spread);
+  font-size: 9px;
+  line-height: 12px;
+  text-align: center;
+}
+
+.usage__axis {
+  margin-top: 2px;
+}
+
+.usage__tick {
+  color: var(--color-text-muted);
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+}
+
+.usage__tick.is-today {
+  color: var(--color-text-strong);
+  font-weight: 600;
+}
+
+.usage__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 12px;
+}
+
+.usage__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.usage__key {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.usage__key--bar {
+  background: var(--usage-bar);
+}
+
+.usage__key--spread {
+  background: var(--usage-spread);
+}
+
+.usage__note {
+  margin: 10px 0 0;
+  color: var(--color-text);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.usage__note strong {
+  color: var(--color-text-strong);
+  font-weight: 600;
+}
+
+.usage__note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.usage__note-day {
+  color: var(--color-text-strong);
+  font-weight: 500;
+}
+
+/* La diferencia puede ser larga: se parte en dos líneas dentro del tooltip. */
+.usage__tooltip {
+  max-width: 220px;
+}
+
+.usage__tooltip-row--difference {
+  align-items: flex-start;
+}
+
+.usage__tooltip-row--difference .usage__key {
+  margin-top: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .usage__bar {
+    transition: none;
+  }
+}

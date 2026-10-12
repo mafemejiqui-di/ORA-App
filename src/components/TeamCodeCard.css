@@ -1,0 +1,39 @@
+.team-code {
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background: var(--color-teal-tint);
+}
+
+.team-code__header {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+
+.team-code__icon {
+  flex: none;
+  margin-top: 2px;
+}
+
+.team-code__title {
+  margin: 0;
+  color: var(--color-text-strong);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+}
+
+.team-code__hint {
+  margin: 0;
+  padding-top: 2px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 16.8px;
+}
+
+.team-code__input {
+  height: 44px;
+  background: #fff;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}

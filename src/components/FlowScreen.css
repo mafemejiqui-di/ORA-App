@@ -1,0 +1,92 @@
+.flow {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: var(--color-bg);
+}
+
+.flow__header {
+  flex: none;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 0;
+}
+
+/* El chevron tiene 40 px de área táctil; se corre para alinear el ícono con el margen. */
+.flow__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: -12px;
+}
+
+.flow__meta {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.flow__title {
+  margin: 8px 0 0;
+  color: var(--color-brand-dark);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.flow__sub {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.flow__scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 20px 20px 24px;
+  overflow-y: auto;
+}
+
+.flow__block + .flow__block {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(211, 209, 199, 0.4);
+}
+
+.flow__question {
+  margin: 0;
+  color: var(--color-brand-dark);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.flow__hint {
+  margin: 2px 0 12px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* Las tarjetas de estado ya traen un margen superior propio. */
+.flow__block .estado {
+  margin-top: 0;
+}
+
+.flow__footer {
+  flex: none;
+  padding: 12px 20px max(34px, env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.flow__done-note {
+  margin: 0 0 10px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19px;
+  text-align: center;
+}
+
+.flow .btn {
+  border-radius: 12px;
+}

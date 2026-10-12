@@ -1,0 +1,93 @@
+.streak {
+  --glass-radius: 26px;
+
+  margin: 16px 20px 0;
+  padding: 18px 20px;
+}
+
+.streak__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.streak__count {
+  display: flex;
+  flex-direction: column;
+}
+
+.streak__number {
+  color: var(--color-brand-dark);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 40px;
+}
+
+.streak__unit {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.streak__record {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.streak__dots {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.streak__dot {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 50%;
+  background: transparent;
+}
+
+.streak__dot--completed {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+}
+
+/* Hoy pendiente: solo el aro; al completar se rellena. */
+.streak__dot--today {
+  border-color: var(--color-brand-dark);
+}
+
+.streak__dot--today-done {
+  border-color: var(--color-brand-dark);
+  background: var(--color-brand-dark);
+}
+
+/* Rebote al completar: 0.8 → 1.2 → 1 en 400 ms. */
+.streak__dot.is-pop {
+  animation: streak-pop 400ms ease-out;
+}
+
+@keyframes streak-pop {
+  0% {
+    transform: scale(0.8);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .streak__dot.is-pop {
+    animation: none;
+  }
+}

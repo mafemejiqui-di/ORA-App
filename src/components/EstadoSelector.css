@@ -1,0 +1,74 @@
+/* Sale del margen de la pantalla para que las tarjetas se deslicen hasta el borde. */
+.estado {
+  display: flex;
+  gap: 10px;
+  margin: 12px -20px 0;
+  padding: 0 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.estado::-webkit-scrollbar {
+  display: none;
+}
+
+.estado__card {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 64px;
+  height: 80px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface-soft);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: transform 150ms ease;
+}
+
+.estado__card:active {
+  transform: scale(0.95);
+  transition-duration: 80ms;
+}
+
+.estado__card.is-selected {
+  border-color: transparent;
+  background: var(--color-rose-dark);
+  color: #fff;
+}
+
+.estado__card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Solo lectura: resalta lo elegido y atenúa el resto. */
+.estado.is-readonly .estado__card {
+  cursor: default;
+  transform: none;
+}
+
+.estado.is-readonly .estado__card:not(.is-selected) {
+  opacity: 0.45;
+}
+
+.estado__emoji {
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.estado__label {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .estado__card {
+    transition: none;
+  }
+}

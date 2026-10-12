@@ -1,0 +1,138 @@
+/* Hoja a pantalla completa que sube desde abajo. */
+.ritual {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: var(--color-bg);
+  animation: ritual-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes ritual-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+.ritual__header {
+  flex: none;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.ritual__close {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 0 4px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.ritual__close:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.ritual__handle {
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-border);
+}
+
+.ritual__top {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 20px 4px 8px;
+}
+
+.ritual__back {
+  flex: none;
+}
+
+.ritual__title {
+  margin: 0;
+  color: var(--color-brand-dark);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.ritual__sub {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  /* Alineado con el título, a la derecha del chevron. */
+  margin: 0 20px 0 52px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.ritual__scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 24px 20px;
+  overflow-y: auto;
+}
+
+.ritual__block + .ritual__block {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(211, 209, 199, 0.4);
+}
+
+.ritual__step {
+  margin: 0;
+  color: var(--color-brand-dark);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  line-height: 15px;
+  text-transform: uppercase;
+}
+
+.ritual__question {
+  margin: 4px 0 0;
+  color: var(--color-text-strong);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 25.5px;
+}
+
+.ritual__question--spaced {
+  margin-bottom: 14px;
+}
+
+.ritual__hint {
+  margin: 0 0 10px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.ritual__footer {
+  flex: none;
+  padding: 12px 20px max(34px, env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.ritual__done-note {
+  margin: 0 0 10px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19px;
+  text-align: center;
+}
+
+.ritual .btn {
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ritual {
+    animation: none;
+  }
+}

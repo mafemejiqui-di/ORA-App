@@ -1,0 +1,168 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+html {
+  /* El celular no agranda la letra por su cuenta al girar la pantalla. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  /* Comportamiento de app: sin rebote al pasar el borde ni zoom con doble toque. */
+  overscroll-behavior-y: none;
+  touch-action: manipulation;
+}
+
+/* Los controles de formulario no heredan la fuente por defecto: así todo queda en Poppins. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+/* Texto solo para lectores de pantalla. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * Vidrio esmerilado (glass, estilo Apple): tarjeta lechosa, muy lisa, de
+ * esquinas amplias, con borde luminoso y un brillo diagonal por dentro.
+ * Se aplica con la clase .glass.
+ */
+.glass {
+  --glass-radius: 28px;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--glass-radius);
+  /* Leche fría con un toque de teal, más clara arriba a la izquierda. */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.62) 0%,
+    rgba(224, 240, 244, 0.46) 55%,
+    rgba(214, 233, 239, 0.4) 100%
+  );
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  box-shadow:
+    /* filo exterior fino */ 0 0 0 1px rgba(70, 110, 125, 0.16),
+    /* luz en los bordes: más fuerte arriba/izquierda */ inset 1px 1px 0 rgba(255, 255, 255, 0.95),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.4),
+    /* resplandor suave que sube desde el borde */ inset 0 0 22px rgba(255, 255, 255, 0.4),
+    /* sombra difusa */ 0 18px 40px -14px rgba(50, 90, 105, 0.32),
+    0 4px 14px rgba(50, 90, 105, 0.1);
+}
+
+/* Grano muy fino: el "sandblasting" del vidrio, apenas perceptible. */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .45 0 0 0 0 .5 1.1 0 0 0 -.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+/* Brillo diagonal interior, como el reflejo de la referencia. */
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 36%,
+    rgba(255, 255, 255, 0) 64%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  pointer-events: none;
+}
+
+/* Sin soporte de desenfoque, o si la persona pidió menos transparencia: fondo más sólido. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass {
+    background: rgba(250, 246, 243, 0.94);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: rgba(250, 246, 243, 0.97);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .glass::before,
+  .glass::after {
+    display: none;
+  }
+}
+
+/* Tarjeta suave que se repite en Home, Ciclo, Equipo, Perfil e Historial. */
+.card {
+  border-radius: var(--radius-panel);
+  background: rgba(241, 239, 232, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Etiqueta de sección (MI TÓTEM, AJUSTES, HISTORIAL...). */
+.section-label {
+  margin: 0;
+  color: var(--color-brand-dark);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.88px;
+  line-height: 16.5px;
+  text-transform: uppercase;
+}
+
+/* Contenedor móvil: a pantalla completa en el celular, columna centrada en escritorio. */
+.app-shell {
+  position: relative;
+  width: 100%;
+  max-width: var(--app-max-width);
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--color-bg);
+  overflow-x: clip;
+}
+
+@media (min-width: 600px) {
+  body {
+    background: var(--color-bg-outer);
+  }
+
+  .app-shell {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+}

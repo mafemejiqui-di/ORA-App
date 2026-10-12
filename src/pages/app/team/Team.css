@@ -1,0 +1,143 @@
+.team {
+  /* Deja libre el espacio de la barra de navegación y su burbuja. */
+  padding-bottom: 128px;
+}
+
+.team__header {
+  padding: var(--screen-top) 20px 36px;
+}
+
+.team__title {
+  margin: 0;
+  color: var(--color-brand-dark);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 33px;
+}
+
+.team__section {
+  padding: 0 20px;
+}
+
+.team__section--patterns {
+  padding-top: 43px;
+}
+
+.team__section > .section-label {
+  margin-bottom: 12px;
+}
+
+.team__join {
+  margin-top: 16px;
+}
+
+.team__join-button {
+  margin-top: 12px;
+}
+
+.team__empty {
+  margin: 0;
+  padding: 20px;
+  border: 1.127px dashed var(--color-border);
+  border-radius: 14px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 19.5px;
+  text-align: center;
+}
+
+/* Integrantes */
+.team__members {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.team-member {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 7.5px 16px;
+  border-radius: 14px;
+  background: var(--color-surface-soft);
+}
+
+.team-member__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.team-member__name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  color: var(--color-text-strong);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+}
+
+.team-member__name-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.team-member__name img {
+  flex: none;
+}
+
+.team-member__role {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.team__invite {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  height: 56px;
+  margin-top: 12px;
+  border: 1.127px dashed var(--color-border);
+  border-radius: 14px;
+  background: none;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 19.5px;
+  cursor: pointer;
+}
+
+.team__invite:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Patrones */
+.team__caption {
+  margin: -8px 0 12px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.team__retry {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+

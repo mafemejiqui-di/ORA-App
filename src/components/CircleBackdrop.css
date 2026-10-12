@@ -1,0 +1,46 @@
+/* Posiciones tomadas del frame "Cuenta creada" de Figma (393 px de ancho). */
+.circle-backdrop img {
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
+}
+
+.circle-backdrop__bottom {
+  left: -134px;
+  top: 590px;
+}
+
+.circle-backdrop__right {
+  left: 133px;
+  top: 88px;
+}
+
+.circle-backdrop__top {
+  left: -19px;
+  top: -28px;
+}
+
+.circle-backdrop__full {
+  left: -134px;
+  top: -28px;
+}
+
+/*
+ * Anillos en las esquinas: arriba anclados al borde superior, abajo al inferior. Ocupan todo el
+ * ancho de la pantalla y crecen en proporción (el diseño es de 393 px; hay celulares de 430–440 px).
+ */
+.circle-backdrop__corner {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.circle-backdrop__corner--top {
+  top: 0;
+}
+
+.circle-backdrop__corner--bottom {
+  bottom: 0;
+}

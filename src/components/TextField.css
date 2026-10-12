@@ -1,0 +1,68 @@
+.field__control {
+  position: relative;
+}
+
+.field__input {
+  display: block;
+  width: 100%;
+  height: 48px;
+  padding: 0 17px;
+  border: 1.156px solid var(--color-border);
+  border-radius: var(--radius-input);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-strong);
+  font: inherit;
+  font-size: 16px;
+}
+
+.field__input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+.field__input:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.field__input--with-trailing {
+  padding-right: 49px;
+}
+
+.field__input[aria-invalid="true"] {
+  border-color: var(--color-rose);
+}
+
+.field__toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 49px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.field__toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -4px;
+  border-radius: var(--radius-input);
+}
+
+.field__msg {
+  margin: 4px 0 0;
+  padding-left: 4px;
+  font-size: 11px;
+  line-height: 16.5px;
+  color: var(--color-text-muted);
+}
+
+.field__msg--error {
+  color: var(--color-rose);
+}

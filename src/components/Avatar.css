@@ -1,0 +1,25 @@
+.avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-brand-dark);
+  color: #fff;
+  font-weight: 600;
+}
+
+.avatar--md {
+  width: 40px;
+  height: 40px;
+  font-size: 15px;
+  line-height: 22.5px;
+}
+
+.avatar--lg {
+  width: 72px;
+  height: 72px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 39px;
+}

@@ -1,0 +1,38 @@
+.tag {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  border: 1.156px solid;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tag--md {
+  height: 28.77px;
+  padding: 0 12px;
+  font-size: 11px;
+  letter-spacing: 0.66px;
+  line-height: 16.5px;
+}
+
+.tag--sm {
+  height: 23.32px;
+  padding: 0 8px;
+  font-size: 10px;
+  letter-spacing: 0.6px;
+  line-height: 15px;
+}
+
+.tag--teal {
+  background: var(--color-teal-soft);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.tag--warm {
+  background: var(--color-warm-soft);
+  border-color: var(--color-warm-border);
+  color: var(--color-brand-dark);
+}

@@ -1,0 +1,193 @@
+/*
+ * Splash de ORA (≈2.95 s):
+ *   0.00–0.75 s  aparecen O, R y A (una tras otra)
+ *   1.10–1.60 s  R y A se recogen en la O; la O pasa al centro y crece (el anillo del ícono)
+ *   1.60–1.85 s  aparece el punto azul abajo a la derecha del anillo, como en el ícono
+ *   1.95–2.25 s  el anillo se desvanece y el punto va al centro
+ *   2.25–2.95 s  el punto se abre en un círculo que revela la app
+ */
+
+/* Radio del círculo que se abre (registrado para poder animarlo). */
+@property --splash-reveal {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+.splash {
+  /* Alto de las letras; el resto de medidas sale de aquí para conservar las proporciones del logo. */
+  --h: 64px;
+  --wine: #6d0d1d;
+  --dot: #138494;
+  /* Anillo de la O al crecer y posición del punto respecto a él (proporciones del ícono). */
+  --ring-scale: 1.5;
+  --dot-size: calc(var(--h) * 0.3645);
+  --dot-x: calc(var(--h) * 0.867);
+  --dot-y: calc(var(--h) * 0.57);
+
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: hidden;
+  background: var(--wine);
+  cursor: pointer;
+  /* Hueco circular en el centro: por ahí se ve la app al final. */
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent var(--splash-reveal),
+    #000 calc(var(--splash-reveal) + 0.5px)
+  );
+  mask-image: radial-gradient(circle at 50% 50%, transparent var(--splash-reveal), #000 calc(var(--splash-reveal) + 0.5px));
+  animation: splash-reveal 700ms cubic-bezier(0.65, 0, 0.35, 1) 2250ms forwards;
+}
+
+@keyframes splash-reveal {
+  to {
+    --splash-reveal: 110vmax;
+  }
+}
+
+/* Cada letra se ubica por su centro, con la distancia que tiene en el logo. */
+.splash__letter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: var(--h);
+  margin-top: calc(var(--h) / -2);
+  opacity: 0;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.splash__letter--o {
+  --x: calc(var(--h) * -1.0484);
+  width: calc(var(--h) * 0.9965);
+  margin-left: calc(var(--h) * -0.4983);
+  animation:
+    splash-letter-in 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 0ms forwards,
+    splash-o-center 500ms cubic-bezier(0.65, 0, 0.35, 1) 1100ms forwards,
+    splash-o-out 300ms ease-in 1950ms forwards;
+}
+
+.splash__letter--r {
+  --x: calc(var(--h) * 0.0424);
+  width: calc(var(--h) * 0.9948);
+  margin-left: calc(var(--h) * -0.4974);
+  animation:
+    splash-letter-in 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 120ms forwards,
+    splash-letter-gather 450ms cubic-bezier(0.65, 0, 0.35, 1) 1100ms forwards;
+}
+
+.splash__letter--a {
+  --x: calc(var(--h) * 1.0545);
+  width: calc(var(--h) * 0.9844);
+  margin-left: calc(var(--h) * -0.4922);
+  animation:
+    splash-letter-in 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 240ms forwards,
+    splash-letter-gather 450ms cubic-bezier(0.65, 0, 0.35, 1) 1150ms forwards;
+}
+
+@keyframes splash-letter-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--x), 18px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(var(--x), 0);
+  }
+}
+
+/* R y A se recogen hacia el centro, dentro de la O. */
+@keyframes splash-letter-gather {
+  from {
+    opacity: 1;
+    transform: translate(var(--x), 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+}
+
+@keyframes splash-o-center {
+  from {
+    opacity: 1;
+    transform: translate(var(--x), 0) scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(var(--ring-scale));
+  }
+}
+
+@keyframes splash-o-out {
+  from {
+    opacity: 1;
+    transform: translate(0, 0) scale(var(--ring-scale));
+  }
+  to {
+    opacity: 0;
+    transform: translate(0, 0) scale(calc(var(--ring-scale) * 0.85));
+  }
+}
+
+/*
+ * Punto azul: aparece junto al anillo, viaja al centro y crece. Su borde va 16 px por fuera del
+ * hueco que se abre, así que durante la revelación se ve como un aro azul que se expande.
+ */
+.splash__dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--dot-size) + var(--splash-reveal) * 2);
+  height: calc(var(--dot-size) + var(--splash-reveal) * 2);
+  border-radius: 50%;
+  background: var(--dot);
+  opacity: 0;
+  transform: translate(-50%, -50%) translate(var(--dot-x), var(--dot-y)) scale(0);
+  animation:
+    splash-dot-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1) 1600ms forwards,
+    splash-dot-center 300ms cubic-bezier(0.65, 0, 0.35, 1) 1950ms forwards;
+}
+
+@keyframes splash-dot-in {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(var(--dot-x), var(--dot-y)) scale(1);
+  }
+}
+
+@keyframes splash-dot-center {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(var(--dot-x), var(--dot-y)) scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Sin animaciones: el logo completo un momento y luego se desvanece. */
+@media (prefers-reduced-motion: reduce) {
+  .splash {
+    animation: splash-fade 300ms ease 700ms forwards;
+  }
+
+  .splash__letter {
+    opacity: 1;
+    transform: translate(var(--x), 0);
+    animation: none;
+  }
+
+  .splash__dot {
+    display: none;
+  }
+
+  @keyframes splash-fade {
+    to {
+      opacity: 0;
+    }
+  }
+}
