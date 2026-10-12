@@ -1,9 +1,32 @@
 // Informe de la app en PDF para la administradora: resumen, uso diario por equipo,
 // diferencias más marcadas, temas de tensión y alertas. Se genera en el navegador.
 import { getGeneration } from "../../data/catalogs";
-import type { AdminSnapshot } from "../../data/api";
+import { getAdminTensionShares, type AdminSnapshot, type AdminTensionReport, type TensionShares } from "../../data/api";
 import { getCycleStatus } from "../../utils/cycle";
-import { getTensionThisWeek, getUsageReport, INACTIVE_ALERT_DAYS, type UsageDay } from "../../utils/teamInsights";
+import { getUsageReport, INACTIVE_ALERT_DAYS, type UsageDay, type UsageReport } from "../../utils/teamInsights";
+
+const WINDOW_DAYS = 14;
+
+/**
+ * Apropiación de la app: de todos los días posibles (integrantes × días del periodo), en cuántos
+ * se usó de verdad. También cuántos integrantes la usaron al menos una vez.
+ */
+function appropriation(report: UsageReport) {
+  const used = report.days.reduce((sum, d) => sum + d.active, 0);
+  const possible = report.days.reduce((sum, d) => sum + d.total, 0);
+  const neverUsed = report.alerts.filter((a) => a.daysInactive === null).length;
+  return {
+    percent: possible ? Math.round((used / possible) * 100) : 0,
+    used,
+    possible,
+    membersUsed: report.members - neverUsed,
+    members: report.members,
+  };
+}
+
+/** "1. Falta de consenso — 32% (8 menciones)". */
+const shareLine = (t: TensionShares["themes"][number], i: number) =>
+  `${i + 1}. ${t.label} — ${t.share.toLocaleString("es-CO", { maximumFractionDigits: 1 })}% (${t.count} ${t.count === 1 ? "mención" : "menciones"})`;
 
 const MONTH = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 const WEEKDAY = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
@@ -60,7 +83,14 @@ export async function exportAppReport(snapshot: AdminSnapshot, now = new Date())
   };
 
   const { teams } = snapshot;
-  const overall = getUsageReport(snapshot, teams, 14, now);
+  const overall = getUsageReport(snapshot, teams, WINDOW_DAYS, now);
+  const overallUse = appropriation(overall);
+  // Si la consulta de tensiones falla, el informe sale igual (sin porcentajes de tensión).
+  const shares: AdminTensionReport = await getAdminTensionShares(WINDOW_DAYS).catch(() => ({
+    days: WINDOW_DAYS,
+    teams: {},
+    overall: null,
+  }));
 
   // ── Portada y resumen ─────────────────────────────────────────────
   text("Informe de uso de la app", { size: 20, bold: true, color: BROWN });
@@ -71,13 +101,15 @@ export async function exportAppReport(snapshot: AdminSnapshot, now = new Date())
   const stats = [
     [String(teams.length), "Equipos conectados"],
     [String(overall.members), "Integrantes"],
+    [`${overallUse.percent}%`, "Apropiación de la app"],
     [String(overall.activeToday), "Usaron la app hoy"],
     [String(overall.alerts.length), `Alertas (${INACTIVE_ALERT_DAYS}+ días sin uso)`],
   ];
-  const boxWidth = (contentWidth - 3 * 4) / 4;
+  const boxGap = 3;
+  const boxWidth = (contentWidth - (stats.length - 1) * boxGap) / stats.length;
   ensure(22);
   stats.forEach(([value, label], i) => {
-    const x = page.margin + i * (boxWidth + 4);
+    const x = page.margin + i * (boxWidth + boxGap);
     doc.setFillColor(241, 239, 232);
     doc.roundedRect(x, y, boxWidth, 20, 2, 2, "F");
     doc.setFont("helvetica", "bold");
@@ -91,12 +123,36 @@ export async function exportAppReport(snapshot: AdminSnapshot, now = new Date())
   });
   y += 28;
 
+  // ── Apropiación y tensiones de todos los equipos ──────────────────
+  text("Apropiación de la app", { size: 12, bold: true, color: BROWN });
+  gap(1);
+  text(
+    `${overallUse.percent}% de apropiación: la app se usó en ${overallUse.used} de ${overallUse.possible} días posibles ` +
+      `(${overallUse.members} integrantes × ${WINDOW_DAYS} días). ${overallUse.membersUsed} de ${overallUse.members} integrantes ` +
+      `(${overallUse.members ? Math.round((overallUse.membersUsed / overallUse.members) * 100) : 0}%) la usaron al menos una vez.`,
+    { size: 9.5 },
+  );
+  gap(4);
+  text("Tensiones más evidenciadas (todos los equipos)", { size: 12, bold: true, color: BROWN });
+  gap(1);
+  if (shares.overall) {
+    text(`Porcentaje de las ${shares.overall.total} menciones de tensión registradas por ${shares.overall.people} personas en los últimos ${WINDOW_DAYS} días:`, {
+      size: 9,
+      color: MUTED,
+    });
+    gap(1);
+    shares.overall.themes.forEach((t, i) => text(shareLine(t, i), { size: 9.5, x: page.margin + 3 }));
+  } else {
+    text("Aún no hay suficientes registros de tensión (se necesitan al menos 3 personas).", { size: 9.5, color: MUTED });
+  }
+  gap(6);
+
   // ── Un bloque por equipo ──────────────────────────────────────────
   for (const team of teams) {
-    const report = getUsageReport(snapshot, [team], 14, now);
+    const report = getUsageReport(snapshot, [team], WINDOW_DAYS, now);
     const members = snapshot.members[team.id] ?? [];
     const status = getCycleStatus(team, now);
-    const average = report.days.length ? Math.round(report.days.reduce((s, d) => s + d.percent, 0) / report.days.length) : 0;
+    const use = appropriation(report);
     const inactive = new Map(report.alerts.map((a) => [a.member.id, a.daysInactive]));
 
     ensure(60);
@@ -106,8 +162,14 @@ export async function exportAppReport(snapshot: AdminSnapshot, now = new Date())
     text(
       `Código ${team.code} · ${members.length} integrantes · ${
         status ? `Ciclo ${status.number} · Semana ${status.week} de 3` : "Sin ciclo en curso"
-      } · Uso promedio ${average}%`,
+      }`,
       { size: 9, color: MUTED },
+    );
+    gap(2);
+    text(
+      `Apropiación de la app: ${use.percent}% (${use.used} de ${use.possible} días posibles) · ` +
+        `${use.membersUsed} de ${use.members} integrantes la usaron al menos una vez`,
+      { size: 9.5, bold: true, color: PRIMARY },
     );
     gap(4);
 
@@ -162,15 +224,17 @@ export async function exportAppReport(snapshot: AdminSnapshot, now = new Date())
       }
     }
 
-    // Temas de tensión de la semana.
-    const tension = getTensionThisWeek(snapshot, team);
-    ensure(12);
-    text("Temas que generaron tensión esta semana", { size: 10, bold: true });
+    // Tensiones más evidenciadas del equipo, con su porcentaje del total de menciones.
+    const teamShares = shares.teams[team.id];
+    ensure(12 + (teamShares?.themes.length ?? 1) * 4.5);
+    text(`Tensiones más evidenciadas (últimos ${WINDOW_DAYS} días)`, { size: 10, bold: true });
     gap(1);
-    text(tension.length ? tension.map((t, i) => `${i + 1}. ${t.label}`).join("    ") : "Sin registros de tensión esta semana.", {
-      size: 9,
-      x: page.margin + 3,
-    });
+    if (teamShares) {
+      text(`${teamShares.total} menciones registradas por ${teamShares.people} personas:`, { size: 9, color: MUTED, x: page.margin + 3 });
+      teamShares.themes.forEach((t, i) => text(shareLine(t, i), { size: 9, x: page.margin + 3 }));
+    } else {
+      text("Menos de 3 personas registraron tensiones: no se muestran por privacidad.", { size: 9, color: MUTED, x: page.margin + 3 });
+    }
     gap(3);
 
     // Integrantes y su último uso.

@@ -534,6 +534,31 @@ export type AdminSnapshot = {
   weeks: Record<string, TeamWeek[]>;
 };
 
+/** Menciones de tensión y su porcentaje del total (ver supabase/05_admin_report.sql). */
+export type TensionShares = {
+  /** Personas que registraron tensiones y total de menciones; temas con su conteo y % del total. */
+  total: number;
+  people: number;
+  themes: { label: string; count: number; share: number }[];
+};
+
+export type AdminTensionReport = {
+  days: number;
+  /** Por equipo; falta el equipo si tuvo menos de 3 personas con registros. */
+  teams: Record<string, TensionShares>;
+  /** Todos los equipos juntos; null con menos de 3 personas. */
+  overall: TensionShares | null;
+};
+
+export async function getAdminTensionShares(days = 14): Promise<AdminTensionReport> {
+  try {
+    const data = unwrap(await supabase.rpc("get_admin_tension_shares", { p_days: days })) as AdminTensionReport | null;
+    return { days, teams: data?.teams ?? {}, overall: data?.overall ?? null };
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
+
 export async function getAdminSnapshot(): Promise<AdminSnapshot> {
   try {
     const rows = unwrap(
