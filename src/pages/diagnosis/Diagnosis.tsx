@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import lockIcon from "../../assets/icons/lock.svg";
 import { Button } from "../../components/Button";
 import { ChipSelector } from "../../components/ChipSelector";
 import { EstadoSelector } from "../../components/EstadoSelector";
@@ -53,7 +54,10 @@ export function Diagnosis() {
       footer={
         saved && !saving ? (
           <>
-            <p className="flow__done-note">Ya guardaste tu diagnóstico de este ciclo.</p>
+            <p className="flow__done-note flow__done-note--locked">
+              <img src={lockIcon} width={13} height={13} alt="" />
+              Ya guardaste tu diagnóstico de este ciclo: no se pueden agregar más respuestas.
+            </p>
             <Button variant="outline" onClick={() => navigate("/inicio")}>
               Volver al inicio
             </Button>

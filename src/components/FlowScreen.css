@@ -87,6 +87,19 @@
   text-align: center;
 }
 
+/* Módulo cerrado: candado junto al aviso. */
+.flow__done-note--locked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.flow__done-note--locked img {
+  flex: none;
+  opacity: 0.6;
+}
+
 .flow .btn {
   border-radius: 12px;
 }

@@ -15,6 +15,8 @@ type ModuleConfig = {
   lock?: { pill: string; footer: string };
   /** Texto del estado cuando está disponible (por defecto "Disponible"). */
   status?: string;
+  /** Ya no se puede agregar información (se respondió o pasó su semana), pero se pueden ver las respuestas. */
+  closed?: boolean;
   /** Tarjeta que queda centrada al abrir el carrusel: la de la semana en curso. */
   featured?: boolean;
 };
@@ -42,6 +44,8 @@ export function ModuleCarousel() {
       to: "/ciclo/diagnostico",
       featured: cycle?.week === 1,
       status: diagnosisDone ? "Respondido" : undefined,
+      // Una respuesta por ciclo y solo en la semana 1: respondido o vencido, queda con candado.
+      closed: Boolean(cycle) && (diagnosisDone || !cycle?.diagnosisOpen),
       lock: !cycle
         ? noTeam
         : cycle.diagnosisOpen || diagnosisDone
@@ -64,6 +68,7 @@ export function ModuleCarousel() {
       to: "/ciclo/cierre",
       featured: cycle?.week === 3,
       status: closingDone ? "Respondido" : undefined,
+      closed: closingDone,
       lock: !cycle
         ? noTeam
         : cycle.closingOpen || closingDone
@@ -131,7 +136,13 @@ export function ModuleCarousel() {
           >
             <span className="module__row">
               <span className="module__eyebrow">{module.eyebrow}</span>
-              <span className="module__status">{module.lock ? module.lock.pill : (module.status ?? "Disponible")}</span>
+              <span className="module__status">
+                {/* Candado: ya no se puede agregar información en este módulo. */}
+                {(module.lock || module.closed) && (
+                  <img className="module__icon module__status-lock" src={lockIcon} width={10} height={10} alt="" />
+                )}
+                {module.lock ? module.lock.pill : (module.status ?? "Disponible")}
+              </span>
             </span>
             <span className="module__body">
               <span className="module__title">{module.title}</span>
@@ -141,6 +152,11 @@ export function ModuleCarousel() {
               <span className="module__footer">
                 <img className="module__icon" src={lockIcon} width={12} height={12} alt="" />
                 <span className="module__footer-text">{module.lock.footer}</span>
+              </span>
+            ) : module.closed ? (
+              <span className="module__footer">
+                <img className="module__icon" src={lockIcon} width={12} height={12} alt="" />
+                <span className="module__footer-text">Cerrado · toca para ver tus respuestas</span>
               </span>
             ) : (
               <span className="module__row">
