@@ -13,7 +13,8 @@
 --   Energía: Agotado 1 · Neutro 2 · Estable 3 · Activo 4 · Enfocado 5
 --   Niveles del mapa: < 0.25 baja · 0.25–0.5 media · > 0.5 alta
 --   Privacidad: ningún grupo (generación, equipo, tema) se muestra con menos de 3 personas,
---   salvo "Fricción más frecuente" por generación, que se muestra desde 2 (decisión del usuario).
+--   salvo "Fricción más frecuente" por generación, que se muestra desde 2, y el mapa de puntos
+--   del Inicio, que muestra cada generación desde 1 persona (decisiones del usuario).
 --
 -- Tiempo real: cada registro nuevo toca `teams.activity_at`; la app escucha ese cambio
 -- (Supabase Realtime) y vuelve a pedir los datos agregados. Nunca viajan respuestas individuales.
@@ -138,6 +139,8 @@ declare
   -- "Fricción más frecuente" (pantalla Equipo): basta con 2 personas de la misma generación
   -- (decisión del usuario). El resto de patrones sigue pidiendo 3.
   min_friction constant int := 2;
+  -- Mapa de puntos del Inicio: cada generación aparece desde 1 persona (decisión del usuario).
+  min_dotmap constant int := 1;
   cur public.cycles;
   week int;
   members int;
@@ -201,8 +204,9 @@ begin
          end
     into tension;
 
-  -- Mapa de puntos: tensión promedio por módulo y generación (+ "mixed" = todo el equipo).
-  -- Primero el promedio de cada persona; luego el de cada grupo con 3+ personas.
+  -- Mapa de puntos: tensión promedio por módulo y generación (sin columna "Mixto").
+  -- Primero el promedio de cada persona; luego el de su generación desde 1 persona
+  -- (decisión del usuario: cada respuesta aparece de inmediato en su generación).
   with per_user as (
     select 'diagnosis' as module, x.user_id, avg(public.score_friction(x.sentir, x.actitud)) as s
       from public.diagnoses x where x.cycle_id = cur.id group by x.user_id
@@ -216,9 +220,7 @@ begin
     select u.module, coalesce(p.generation, 'none') as g, u.s
       from per_user u join public.profiles p on p.id = u.user_id
   ), cells as (
-    select module, g, round(avg(s), 3) as v from labeled where g <> 'none' group by module, g having count(*) >= min_n
-    union all
-    select module, 'mixed', round(avg(s), 3) from labeled group by module having count(*) >= min_n
+    select module, g, round(avg(s), 3) as v from labeled where g <> 'none' group by module, g having count(*) >= min_dotmap
   )
   select coalesce(jsonb_object_agg(module, cols), '{}'::jsonb) into dotmap
     from (select module, jsonb_object_agg(g, v) as cols from cells group by module) m;

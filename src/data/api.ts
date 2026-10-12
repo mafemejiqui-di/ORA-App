@@ -401,8 +401,8 @@ export type TeamDashboard = {
   friction: { generation: GenerationId; value: number; share: number }[];
   /** Temas de tensión del ciclo (máximo 3, valor relativo 0–1). */
   tension: { label: string; value: number }[];
-  /** Tensión promedio (0–1) por módulo y generación; "mixed" = todo el equipo. Sin llave = sin datos. */
-  dotmap: Partial<Record<CycleModule, Partial<Record<GenerationId | "mixed", number>>>>;
+  /** Tensión promedio (0–1) por módulo y generación (desde 1 persona). Sin llave = sin datos. */
+  dotmap: Partial<Record<CycleModule, Partial<Record<GenerationId, number>>>>;
   history: CycleSummary[];
 };
 

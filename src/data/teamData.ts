@@ -18,5 +18,4 @@ export const DOT_MAP_COLUMNS = [
   { id: "gen-x", label: "Gen X" },
   { id: "millennials", label: "Mill." },
   { id: "gen-z", label: "Gen Z" },
-  { id: "mixed", label: "Mixto" },
 ] as const;

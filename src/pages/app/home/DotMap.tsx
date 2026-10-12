@@ -31,7 +31,7 @@ const BREATH_STAGGER_SECONDS = 0.43;
 
 /**
  * Mapa de puntos: tensión por generación en cada módulo del ciclo en curso. Lo calcula la base
- * de datos con las respuestas del equipo (solo grupos de 3+ personas) y se actualiza en vivo.
+ * de datos con las respuestas del equipo (cada generación desde 1 persona) y se actualiza en vivo.
  */
 export function DotMap({ dashboard }: { dashboard: TeamDashboard | null }) {
   const [expanded, setExpanded] = useState(true);
@@ -104,7 +104,7 @@ export function DotMap({ dashboard }: { dashboard: TeamDashboard | null }) {
         {!hasData && (
           <p className="dotmap__note">
             {dashboard
-              ? `Los puntos se llenan cuando al menos ${dashboard.minGroup} personas respondan los módulos del ciclo.`
+              ? "Los puntos se llenan a medida que el equipo responde los módulos del ciclo."
               : "Únete a un equipo para ver sus patrones."}
           </p>
         )}
