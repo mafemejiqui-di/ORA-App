@@ -12,7 +12,8 @@
 --   Tensión de cierre: Peor 1 · Igual 0.5 · Algo mejor 0.25 · Mejor / Mucho mejor 0
 --   Energía: Agotado 1 · Neutro 2 · Estable 3 · Activo 4 · Enfocado 5
 --   Niveles del mapa: < 0.25 baja · 0.25–0.5 media · > 0.5 alta
---   Privacidad: ningún grupo (generación, equipo, tema) se muestra con menos de 3 personas.
+--   Privacidad: ningún grupo (generación, equipo, tema) se muestra con menos de 3 personas,
+--   salvo "Fricción más frecuente" por generación, que se muestra desde 2 (decisión del usuario).
 --
 -- Tiempo real: cada registro nuevo toca `teams.activity_at`; la app escucha ese cambio
 -- (Supabase Realtime) y vuelve a pedir los datos agregados. Nunca viajan respuestas individuales.
@@ -134,6 +135,9 @@ create or replace function public.get_team_dashboard(p_team uuid) returns jsonb
 language plpgsql security definer set search_path = '' as $$
 declare
   min_n constant int := 3;
+  -- "Fricción más frecuente" (pantalla Equipo): basta con 2 personas de la misma generación
+  -- (decisión del usuario). El resto de patrones sigue pidiendo 3.
+  min_friction constant int := 2;
   cur public.cycles;
   week int;
   members int;
@@ -160,13 +164,13 @@ begin
     'closing',   (select count(distinct user_id) from public.closings  where cycle_id = cur.id)
   ) into progress;
 
-  -- Fricción por generación (solo generaciones con 3+ respuestas).
+  -- Fricción por generación (solo generaciones con 2+ respuestas).
   with d as (
     select p.generation as g, public.score_friction(x.sentir, x.actitud) as f
       from public.diagnoses x join public.profiles p on p.id = x.user_id
      where x.cycle_id = cur.id and p.generation is not null
   ), grp as (
-    select g, avg(f) as avg_f, sum(f) as sum_f from d group by g having count(*) >= min_n
+    select g, avg(f) as avg_f, sum(f) as sum_f from d group by g having count(*) >= min_friction
   )
   select coalesce(jsonb_agg(jsonb_build_object(
            'generation', g,
@@ -257,6 +261,7 @@ begin
     'cycle', jsonb_build_object('number', cur.number, 'startsAt', cur.starts_at, 'endsAt', cur.ends_at, 'week', week),
     'members', members,
     'minGroup', min_n,
+    'minFriction', min_friction,
     'progress', progress,
     'friction', friction,
     'tension', tension,

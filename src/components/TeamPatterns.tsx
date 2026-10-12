@@ -14,6 +14,7 @@ export function hasPatterns(dashboard: TeamDashboard | null | undefined) {
  */
 export function TeamPatterns({ dashboard }: { dashboard: TeamDashboard }) {
   const { friction, tension, minGroup } = dashboard;
+  const minFriction = dashboard.minFriction ?? 2;
   const max = Math.max(0, ...friction.map((row) => row.value));
   const top = friction.find((row) => row.value === max && max > 0);
 
@@ -22,7 +23,7 @@ export function TeamPatterns({ dashboard }: { dashboard: TeamDashboard }) {
       <div className="pattern pattern--friction">
         <h3 className="pattern__title pattern__title--brown">Fricción más frecuente</h3>
         {friction.length === 0 ? (
-          <p className="pattern__empty">Se muestra cuando al menos {minGroup} personas de una generación respondan "Ver cómo estamos".</p>
+          <p className="pattern__empty">Se muestra cuando al menos {minFriction} personas de una generación respondan "Ver cómo estamos".</p>
         ) : (
           <ul className="pattern__rows">
             {friction.map((row) => (

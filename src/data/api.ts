@@ -390,6 +390,8 @@ export type TeamDashboard = {
   members: number;
   /** Mínimo de personas para mostrar un grupo (privacidad). */
   minGroup: number;
+  /** Mínimo de personas de una generación para "Fricción más frecuente" (2). */
+  minFriction?: number;
   /** Personas que respondieron cada módulo en el ciclo en curso. */
   progress: Record<CycleModule, number>;
   /** Fricción promedio (0–1) y % del total, solo generaciones con respuestas suficientes. */
