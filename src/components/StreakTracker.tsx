@@ -21,7 +21,7 @@ const DOT_TEXT: Record<WeekDot, string> = {
 
 export function StreakTracker({ currentStreak, record, weekDots, popToday = false }: StreakTrackerProps) {
   return (
-    <section className="glass streak" aria-label="Racha del ritual diario">
+    <section className="streak" aria-label="Racha del ritual diario">
       <div className="streak__top">
         <div className="streak__count">
           <span className="streak__number" aria-live="polite">
