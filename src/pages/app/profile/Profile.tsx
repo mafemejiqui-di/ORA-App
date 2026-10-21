@@ -137,14 +137,6 @@ export function Profile() {
               onChange={(next) => void toggleDailyReminder(next)}
             />
           </li>
-          <li className="settings__row">
-            <span className="settings__label">Recordatorio de ciclo</span>
-            <Toggle
-              label="Recordatorio de ciclo"
-              checked={settings.cycleReminder}
-              onChange={(next) => void updateSettings({ cycleReminder: next })}
-            />
-          </li>
           <li className="settings__row settings__row--last">
             <button type="button" className="settings__logout" onClick={() => setConfirmOpen(true)}>
               Cerrar sesión
