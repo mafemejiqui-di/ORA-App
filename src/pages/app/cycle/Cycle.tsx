@@ -14,7 +14,7 @@ import { WeeklyInsight } from "./WeeklyInsight";
 import "./Cycle.css";
 
 // Mismos colores que la leyenda: Ver cómo estamos (vino), Tomar una decisión (azul), Cerrar (gris).
-const WEEK_COLORS = ["var(--color-rose-dark)", "var(--color-primary)", "var(--color-border)"];
+const WEEK_COLORS = ["var(--color-rose-dark)", "var(--color-primary)", "#d4d1c8"];
 
 const MS_PER_DAY = 86_400_000;
 

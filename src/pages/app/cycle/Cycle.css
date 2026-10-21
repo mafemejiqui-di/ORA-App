@@ -162,7 +162,7 @@
 }
 
 .ring-legend__dot--gray {
-  background: var(--color-border);
+  background: #d4d1c8;
 }
 
 .ring-legend__value {
@@ -276,7 +276,8 @@
 }
 
 .cycle-card__title {
-  color: var(--color-brand-dark);
+  /* Beige cálido (el de los aros de la referencia, más oscuro para que se lea). */
+  color: #b8a57a;
   font-size: 14px;
   font-weight: 700;
   line-height: 21px;

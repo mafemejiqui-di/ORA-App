@@ -40,7 +40,8 @@
 }
 
 .week-ring__dot.is-pending {
-  border: 1.5px solid var(--color-border);
+  /* Mismo gris de los aros de la racha del Inicio. */
+  border: 2px solid #d4d1c8;
   background: transparent;
 }
 
