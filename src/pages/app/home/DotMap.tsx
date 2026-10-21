@@ -39,7 +39,7 @@ export function DotMap({ dashboard }: { dashboard: TeamDashboard | null }) {
   const hasData = Boolean(dashboard && Object.keys(dashboard.dotmap).length > 0);
 
   return (
-    <section className="glass dotmap" aria-labelledby="dotmap-title">
+    <section className="dotmap" aria-labelledby="dotmap-title">
       <div className="dotmap__header">
         <h2 className="dotmap__title" id="dotmap-title">
           Patrones del equipo

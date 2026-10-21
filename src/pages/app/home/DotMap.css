@@ -1,6 +1,12 @@
-/* En Figma la leyenda invade el relleno inferior: la tarjeta mide 240 px. */
+/*
+ * Sin relleno de tarjeta: el mapa reposa sobre el fondo de la app y solo conserva un borde gris
+ * tenue. En Figma la leyenda invade el relleno inferior: la tarjeta mide 240 px.
+ */
 .dotmap {
   padding: 20px 20px 9px;
+  border: 1px solid #dedbd3;
+  border-radius: 28px;
+  background: transparent;
 }
 
 .dotmap__header {
