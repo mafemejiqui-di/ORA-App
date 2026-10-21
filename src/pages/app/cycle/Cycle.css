@@ -276,8 +276,8 @@
 }
 
 .cycle-card__title {
-  /* Beige cálido (el de los aros de la referencia, más oscuro para que se lea). */
-  color: #b8a57a;
+  /* Beige casi blanco (decisión del usuario). */
+  color: #f4ead6;
   font-size: 14px;
   font-weight: 700;
   line-height: 21px;
