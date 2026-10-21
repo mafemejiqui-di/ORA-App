@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import flameIcon from "../../../assets/icons/flame.svg";
 import { Avatar } from "../../../components/Avatar";
 import { StreakTracker } from "../../../components/StreakTracker";
-import { getQuestionForDate } from "../../../data/ritual";
 import { useAuth } from "../../../state/AuthContext";
 import { useTeamDashboard } from "../../../state/useTeamDashboard";
 import { getRitualStats } from "../../../utils/ritual";
@@ -43,7 +42,8 @@ export function Home() {
         <button type="button" className="home__ritual" onClick={() => navigate("/ritual")}>
           <span className="home__ritual-text">
             <span className="home__ritual-title">Ritual diario</span>
-            <span className="home__ritual-prompt">{getQuestionForDate(now)}</span>
+            {/* Invitación fija; la pregunta del día se ve dentro del ritual. */}
+            <span className="home__ritual-prompt">Haz una pausa antes de empezar</span>
           </span>
           {/* Fueguito en crema (el ícono se usa como máscara; va entre comillas, ver BottomNav). */}
           <span
