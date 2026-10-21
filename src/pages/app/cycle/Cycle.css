@@ -276,8 +276,8 @@
 }
 
 .cycle-card__title {
-  /* Beige casi blanco (decisión del usuario). */
-  color: #f4ead6;
+  /* Textos del historial en gris; solo "En curso" lleva color. */
+  color: var(--color-text-muted);
   font-size: 14px;
   font-weight: 700;
   line-height: 21px;
@@ -304,7 +304,7 @@
 }
 
 .cycle-card__state--done {
-  color: var(--color-primary);
+  color: var(--color-text-muted);
 }
 
 /* Ciclo terminado: vidrio arenado (esmerilado + grano), igual que las tarjetas de atrás del carrusel de Inicio. */
@@ -318,15 +318,10 @@
   backdrop-filter: blur(14px) saturate(1.2);
 }
 
-/* Ciclo en curso: borde azul y vidrio arenado azul translúcido (misma textura que los terminados). */
+/* Ciclo en curso: sin fondo, solo un borde azul grueso sobre el fondo de la app. */
 .cycle-card--active {
-  border: 1.5px solid var(--color-primary);
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.52 0 0 0 0 0.59 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E"),
-    linear-gradient(145deg, rgba(21, 132, 151, 0.16), rgba(21, 132, 151, 0.06));
-  box-shadow: 0 6px 18px rgba(21, 132, 151, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  backdrop-filter: blur(14px) saturate(1.2);
+  border: 2.5px solid var(--color-primary);
+  background: transparent;
 }
 
 .cycle-card--active .cycle-card__state {
