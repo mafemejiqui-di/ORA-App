@@ -11,6 +11,7 @@ import { getGeneration } from "../../../data/catalogs";
 import { DEFAULT_SETTINGS } from "../../../data/types";
 import { disablePush, enablePush, getPushStatus, type PushStatus } from "../../../lib/push";
 import { useAuth } from "../../../state/AuthContext";
+import { useTotemDraft } from "../../../state/TotemContext";
 import "./Profile.css";
 
 const EMPTY_VALUE = "—";
@@ -18,6 +19,7 @@ const EMPTY_VALUE = "—";
 export function Profile() {
   const navigate = useNavigate();
   const { user, team, logout, updateSettings } = useAuth();
+  const { startEdit } = useTotemDraft();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const { showToast } = useToast();
   // Estado de las notificaciones en ESTE celular (cada aparato se activa por separado).
@@ -70,6 +72,11 @@ export function Profile() {
     { label: "Acción", tone: "warm" as const, value: totem?.accion },
   ];
 
+  function editTotem() {
+    startEdit(totem);
+    navigate("/totem/1");
+  }
+
   function confirmLogout() {
     logout();
     navigate("/", { replace: true });
@@ -106,6 +113,10 @@ export function Profile() {
               </li>
             ))}
           </ul>
+          {/* Abre las 3 preguntas del Tótem con las respuestas actuales para modificarlas. */}
+          <button type="button" className="profile-totem__edit" onClick={editTotem}>
+            {totem ? "Modificar mi Tótem" : "Escribir mi Tótem"}
+          </button>
         </div>
       </section>
 

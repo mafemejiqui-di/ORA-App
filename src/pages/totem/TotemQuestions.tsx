@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { TextArea } from "../../components/TextArea";
+import { useToast } from "../../components/Toast";
 import { useAuth } from "../../state/AuthContext";
 import { useTotemDraft } from "../../state/TotemContext";
 import { isFilled } from "../../utils/validation";
@@ -11,7 +12,7 @@ const REQUIRED_MESSAGE = "Escribe tu respuesta para continuar.";
 
 export function TotemQuestion1() {
   const navigate = useNavigate();
-  const { draft, update } = useTotemDraft();
+  const { draft, editing, update, reset } = useTotemDraft();
   const [error, setError] = useState<string | null>(null);
   const field = useRef<HTMLTextAreaElement>(null);
 
@@ -30,7 +31,13 @@ export function TotemQuestion1() {
       dimension="Persona"
       title="¿Qué patrones repites de liderazgo?"
       ctaLabel="Siguiente"
-      onBack={() => navigate("/totem")}
+      // Al modificarlo desde Perfil, volver regresa al Perfil sin guardar cambios.
+      onBack={() => {
+        if (editing) {
+          navigate("/perfil");
+          reset();
+        } else navigate("/totem");
+      }}
       onNext={next}
     >
       <TextArea
@@ -123,7 +130,8 @@ export function TotemQuestion2() {
 export function TotemQuestion3() {
   const navigate = useNavigate();
   const { saveTotem } = useAuth();
-  const { draft, update, reset } = useTotemDraft();
+  const { showToast } = useToast();
+  const { draft, editing, update, reset } = useTotemDraft();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const field = useRef<HTMLTextAreaElement>(null);
@@ -149,8 +157,13 @@ export function TotemQuestion3() {
       });
       // Primero se navega y después se limpia el borrador, para que esta pantalla
       // no llegue a verse con el borrador vacío (la guarda la mandaría a la pregunta 1).
-      navigate("/totem/listo", { replace: true });
+      if (editing) {
+        navigate("/perfil", { replace: true });
+        showToast("Tu Tótem quedó actualizado", "primary");
+      } else navigate("/totem/listo", { replace: true });
       reset();
+    } catch {
+      showToast("No pudimos guardar tu Tótem. Inténtalo de nuevo.");
     } finally {
       setBusy(false);
     }
@@ -161,7 +174,7 @@ export function TotemQuestion3() {
       step={3}
       dimension="Acción"
       title="Hoy lidero desde..."
-      ctaLabel="Guardar mi tótem"
+      ctaLabel={editing ? "Guardar cambios" : "Guardar mi tótem"}
       busy={busy}
       onBack={() => navigate("/totem/2")}
       onNext={() => void save()}

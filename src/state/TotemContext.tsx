@@ -13,7 +13,11 @@ const EMPTY_DRAFT: TotemDraft = { persona: "", equipoSobra: "", equipoFalta: "",
 
 type TotemDraftValue = {
   draft: TotemDraft;
+  /** true cuando se está modificando el Tótem desde Perfil (no en el registro inicial). */
+  editing: boolean;
   update: (patch: Partial<TotemDraft>) => void;
+  /** Abre el Tótem para modificarlo, con las respuestas actuales ya escritas. */
+  startEdit: (current: TotemDraft | null | undefined) => void;
   reset: () => void;
 };
 
@@ -21,14 +25,27 @@ const TotemDraftContext = createContext<TotemDraftValue | null>(null);
 
 export function TotemDraftProvider({ children }: { children: ReactNode }) {
   const [draft, setDraft] = useState<TotemDraft>(EMPTY_DRAFT);
+  const [editing, setEditing] = useState(false);
 
   const update = useCallback((patch: Partial<TotemDraft>) => {
     setDraft((prev) => ({ ...prev, ...patch }));
   }, []);
 
-  const reset = useCallback(() => setDraft(EMPTY_DRAFT), []);
+  const startEdit = useCallback((current: TotemDraft | null | undefined) => {
+    setDraft(
+      current
+        ? { persona: current.persona, equipoSobra: current.equipoSobra, equipoFalta: current.equipoFalta, accion: current.accion }
+        : EMPTY_DRAFT,
+    );
+    setEditing(true);
+  }, []);
 
-  const value = useMemo(() => ({ draft, update, reset }), [draft, update, reset]);
+  const reset = useCallback(() => {
+    setDraft(EMPTY_DRAFT);
+    setEditing(false);
+  }, []);
+
+  const value = useMemo(() => ({ draft, editing, update, startEdit, reset }), [draft, editing, update, startEdit, reset]);
 
   return <TotemDraftContext.Provider value={value}>{children}</TotemDraftContext.Provider>;
 }
