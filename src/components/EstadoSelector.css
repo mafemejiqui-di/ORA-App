@@ -61,6 +61,20 @@
   line-height: 28px;
 }
 
+/* Expresión dibujada: vinotinto sin seleccionar; en negativo (crema sobre vino) al seleccionarla. */
+.estado__face {
+  display: flex;
+  color: var(--color-rose-dark);
+}
+
+.estado__card.is-selected .estado__face {
+  color: var(--color-bg);
+}
+
+.estado__card.is-selected .estado__label {
+  color: var(--color-bg);
+}
+
 .estado__label {
   font-size: 10px;
   font-weight: 500;

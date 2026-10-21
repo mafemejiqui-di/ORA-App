@@ -1,14 +1,17 @@
 // Contenido del Ritual diario (preguntas y opciones; las respuestas viven en Supabase).
 
-export type EstadoOption = { emoji: string; label: string };
+import type { FaceName } from "../components/FaceIcon";
 
-/** "¿Cómo llegas hoy?" — las mismas cinco opciones que usará "Ver cómo estamos". */
+/** `face`: expresión dibujada (si falta, se muestra el emoji). */
+export type EstadoOption = { emoji: string; label: string; face?: FaceName };
+
+/** "¿Cómo llegas hoy?" — las mismas cinco opciones que usa "Ver cómo estamos". */
 export const ESTADO_OPTIONS: readonly EstadoOption[] = [
-  { emoji: "😔", label: "Agotado" },
-  { emoji: "😐", label: "Neutro" },
-  { emoji: "🙂", label: "Estable" },
-  { emoji: "⚡", label: "Activo" },
-  { emoji: "🔥", label: "Enfocado" },
+  { emoji: "😔", label: "Agotado", face: "tired" },
+  { emoji: "😐", label: "Neutro", face: "neutral" },
+  { emoji: "🙂", label: "Estable", face: "smile" },
+  { emoji: "⚡", label: "Activo", face: "grin" },
+  { emoji: "🔥", label: "Enfocado", face: "happy" },
 ];
 
 /** La pregunta cambia con el día de la semana (0 = domingo, igual que Date.getDay). */

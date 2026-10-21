@@ -1,4 +1,5 @@
 import type { EstadoOption } from "../data/ritual";
+import { FaceIcon } from "./FaceIcon";
 import "./EstadoSelector.css";
 
 type EstadoSelectorProps = {
@@ -27,9 +28,15 @@ export function EstadoSelector({ options, value, onChange, labelledBy, readOnly 
             disabled={readOnly}
             onClick={() => onChange(selected ? null : option.label)}
           >
-            <span className="estado__emoji" aria-hidden="true">
-              {option.emoji}
-            </span>
+            {option.face ? (
+              <span className="estado__face">
+                <FaceIcon name={option.face} />
+              </span>
+            ) : (
+              <span className="estado__emoji" aria-hidden="true">
+                {option.emoji}
+              </span>
+            )}
             <span className="estado__label">{option.label}</span>
           </button>
         );
