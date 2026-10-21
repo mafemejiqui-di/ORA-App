@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import flameIcon from "../../../assets/icons/flame.svg";
 import { Avatar } from "../../../components/Avatar";
 import { StreakTracker } from "../../../components/StreakTracker";
 import { getQuestionForDate } from "../../../data/ritual";
@@ -44,7 +45,13 @@ export function Home() {
             <span className="home__ritual-title">Ritual diario</span>
             <span className="home__ritual-prompt">{getQuestionForDate(now)}</span>
           </span>
-          <span className="home__ritual-link">{ritualDone ? "Ver respuestas" : "Responder ahora"}</span>
+          {/* Fueguito en crema (el ícono se usa como máscara; va entre comillas, ver BottomNav). */}
+          <span
+            className="home__ritual-icon"
+            aria-hidden="true"
+            style={{ WebkitMaskImage: `url("${flameIcon}")`, maskImage: `url("${flameIcon}")` }}
+          />
+          <span className="sr-only">{ritualDone ? "Ver respuestas" : "Responder ahora"}</span>
         </button>
       </div>
 

@@ -64,14 +64,21 @@
   padding: 10px 20px;
   border: 0;
   border-radius: var(--radius-panel);
-  background: var(--color-warm-soft);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  /* Botón en el agua marina de la app, con letras crema. */
+  background: var(--color-primary);
+  box-shadow: 0 6px 14px rgba(21, 132, 151, 0.28);
   text-align: left;
   cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.home__ritual:active {
+  transform: scale(0.98);
+  box-shadow: 0 3px 8px rgba(21, 132, 151, 0.24);
 }
 
 .home__ritual:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-brand-dark);
   outline-offset: 2px;
 }
 
@@ -82,7 +89,7 @@
 
 .home__ritual-title {
   display: block;
-  color: var(--color-brand-dark);
+  color: var(--color-bg);
   font-size: 14px;
   font-weight: 600;
   line-height: 20px;
@@ -92,22 +99,24 @@
   display: block;
   padding-top: 4px;
   overflow: hidden;
-  color: var(--color-text);
+  color: rgba(252, 241, 236, 0.85);
   font-size: 12px;
   line-height: 16px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.home__ritual-link {
+/* Fueguito en lugar de "Responder ahora". */
+.home__ritual-icon {
   flex: none;
-  width: 95px;
+  width: 28px;
+  height: 28px;
   margin-left: 16px;
-  color: var(--color-brand-dark);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  text-align: center;
-  text-decoration: underline;
-  text-underline-position: from-font;
+  background: var(--color-bg);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
