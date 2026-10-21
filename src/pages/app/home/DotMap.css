@@ -120,7 +120,7 @@
   box-sizing: border-box;
   width: 8px;
   height: 8px;
-  border: 1px solid var(--color-border);
+  border: 1.5px solid #d4d1c8;
   background: transparent;
 }
 
@@ -128,8 +128,7 @@
 .dot--low {
   width: 8px;
   height: 8px;
-  background: var(--color-border);
-  opacity: 0.5;
+  background: #d4d1c8;
 }
 
 .dot--medium {
@@ -155,7 +154,7 @@
 }
 
 .dotmap__row.is-pending .dot--none {
-  opacity: 0.35;
+  opacity: 0.6;
 }
 
 .dot--medium,
@@ -211,7 +210,7 @@
 .dot--legend-low {
   width: 5px;
   height: 5px;
-  background: var(--color-border);
+  background: #d4d1c8;
 }
 
 .dotmap__note {
@@ -225,7 +224,7 @@
   box-sizing: border-box;
   width: 6px;
   height: 6px;
-  border: 1px solid var(--color-border);
+  border: 1.5px solid #d4d1c8;
   background: transparent;
 }
 
