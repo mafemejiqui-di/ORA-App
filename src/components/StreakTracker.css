@@ -45,11 +45,11 @@
   list-style: none;
 }
 
-/* Días sin ritual: solo el aro, en gris claro (#e6e4df); el centro deja ver el fondo. */
+/* Días sin ritual: solo el aro, en gris claro (#d4d1c8); el centro deja ver el fondo. */
 .streak__dot {
   width: 28px;
   height: 28px;
-  border: 2px solid #e6e4df;
+  border: 2px solid #d4d1c8;
   border-radius: 50%;
   background: transparent;
 }
