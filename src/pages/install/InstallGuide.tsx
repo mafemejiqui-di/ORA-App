@@ -166,7 +166,7 @@ export function InstallGuide() {
           className={tab === "android" ? "install__tab is-active" : "install__tab"}
           onClick={() => setTab("android")}
         >
-          Android
+          Android / Google Chrome
         </button>
       </div>
 

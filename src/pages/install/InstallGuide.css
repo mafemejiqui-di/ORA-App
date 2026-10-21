@@ -100,12 +100,15 @@
 
 .install__tab {
   height: 40px;
+  padding: 0 6px;
   border: 0;
   border-radius: var(--radius-pill);
   background: none;
   color: var(--color-text);
-  font-size: 14px;
+  /* Se reduce en celulares angostos para que "Android / Google Chrome" quepa en una línea. */
+  font-size: clamp(11px, 3.4vw, 14px);
   font-weight: 500;
+  white-space: nowrap;
   cursor: pointer;
 }
 
