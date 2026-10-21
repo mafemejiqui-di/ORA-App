@@ -41,16 +41,17 @@
   padding: 0 20px;
 }
 
-/* La racha del ritual va justo encima de los patrones del equipo. */
+/* La racha del ritual va arriba, antes del ritual diario. */
 .home .streak {
   margin: 0 20px 20px;
 }
 
+/* Entre el ritual diario (arriba) y los patrones del equipo (abajo). */
 .home__carousel {
-  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-/* Va justo debajo de la racha, antes de los patrones del equipo. */
+/* Va justo debajo de la racha, antes de los módulos del ciclo. */
 .home__ritual-wrap {
   padding-bottom: 20px;
 }

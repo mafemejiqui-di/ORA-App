@@ -48,12 +48,13 @@ export function Home() {
         </button>
       </div>
 
-      <div className="home__section">
-        <DotMap dashboard={dashboard.data} />
-      </div>
-
+      {/* Módulos del ciclo justo debajo del ritual y encima de los patrones del equipo. */}
       <div className="home__carousel">
         <ModuleCarousel />
+      </div>
+
+      <div className="home__section">
+        <DotMap dashboard={dashboard.data} />
       </div>
     </main>
   );
