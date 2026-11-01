@@ -1,17 +1,29 @@
-/* Fondo desenfocado; la tarjeta flota pegada abajo del área visible, o sea, justo encima del teclado
-   (NameSheet.tsx ajusta top/height al visualViewport de cada celular). */
+/* Fondo arenado a pantalla completa. Se pasa de los bordes para que, aunque el celular desplace
+   la página al abrir el teclado, nunca quede una franja sin cubrir. */
+.name-sheet-backdrop {
+  position: fixed;
+  top: -50vh;
+  right: 0;
+  bottom: -50vh;
+  left: 0;
+  z-index: 200;
+  background: rgba(40, 20, 20, 0.22);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  animation: name-sheet-fade 180ms ease-out;
+}
+
+/* Capa de la tarjeta: pegada abajo del área visible, o sea, justo encima del teclado
+   (NameSheet.tsx ajusta top/height al visualViewport de cada celular). Los toques pasan al fondo. */
 .name-sheet-overlay {
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: 201;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   padding: 20px 12px 12px;
-  background: rgba(40, 20, 20, 0.18);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  animation: name-sheet-fade 180ms ease-out;
+  pointer-events: none;
 }
 
 .name-sheet {
@@ -26,6 +38,7 @@
   border-radius: 28px;
   background: var(--color-bg);
   box-shadow: 0 18px 40px rgba(60, 20, 20, 0.18);
+  pointer-events: auto;
   animation: name-sheet-pop 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -85,7 +98,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .name-sheet-overlay,
+  .name-sheet-backdrop,
   .name-sheet {
     animation: none;
   }

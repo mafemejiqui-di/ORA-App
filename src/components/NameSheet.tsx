@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
+import { createPortal } from "react-dom";
 import { Button } from "./Button";
 import { TextField } from "./TextField";
 import "./NameSheet.css";
@@ -51,6 +52,16 @@ export function NameSheet({ open, currentName, onSave, onClose }: NameSheetProps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
+  // Mientras está abierta, la página de atrás no se desplaza (en iPhone dejaría ver partes sin desenfocar).
+  useEffect(() => {
+    if (!open) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -85,47 +96,51 @@ export function NameSheet({ open, currentName, onSave, onClose }: NameSheetProps
     }
   }
 
-  return (
-    <div
-      className={keyboardOpen ? "name-sheet-overlay name-sheet-overlay--keyboard" : "name-sheet-overlay"}
-      style={viewport}
-      onClick={onClose}
-    >
-      <form
-        className="name-sheet"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="name-sheet-title"
-        onClick={(event) => event.stopPropagation()}
-        onSubmit={(event) => void submit(event)}
-        noValidate
+  // Se dibuja directo en <body> para que ningún contenedor de la página recorte el fondo.
+  return createPortal(
+    <>
+      {/* Fondo arenado: siempre a pantalla completa (y un poco más), aparte de la tarjeta que sigue al teclado. */}
+      <div className="name-sheet-backdrop" onClick={onClose} aria-hidden="true" />
+      <div
+        className={keyboardOpen ? "name-sheet-overlay name-sheet-overlay--keyboard" : "name-sheet-overlay"}
+        style={viewport}
       >
-        <div className="name-sheet__head">
-          <h2 className="name-sheet__title" id="name-sheet-title">
-            Tu nombre
-          </h2>
-          <button type="button" className="name-sheet__close" aria-label="Cerrar" onClick={onClose}>
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <TextField
-          ref={inputRef}
-          label="Nombre de usuario"
-          placeholder="Escribe tu nombre"
-          autoComplete="name"
-          maxLength={MAX_NAME}
-          value={value}
-          error={error}
-          hint="Así te verá tu equipo en ORA."
-          onChange={(event) => {
-            setValue(event.target.value);
-            if (error) setError(null);
-          }}
-        />
-        <Button type="submit" className="name-sheet__save" disabled={saving}>
-          {saving ? "Guardando…" : "Guardar"}
-        </Button>
-      </form>
-    </div>
+        <form
+          className="name-sheet"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="name-sheet-title"
+          onSubmit={(event) => void submit(event)}
+          noValidate
+        >
+          <div className="name-sheet__head">
+            <h2 className="name-sheet__title" id="name-sheet-title">
+              Tu nombre
+            </h2>
+            <button type="button" className="name-sheet__close" aria-label="Cerrar" onClick={onClose}>
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <TextField
+            ref={inputRef}
+            label="Nombre de usuario"
+            placeholder="Escribe tu nombre"
+            autoComplete="name"
+            maxLength={MAX_NAME}
+            value={value}
+            error={error}
+            hint="Así te verá tu equipo en ORA."
+            onChange={(event) => {
+              setValue(event.target.value);
+              if (error) setError(null);
+            }}
+          />
+          <Button type="submit" className="name-sheet__save" disabled={saving}>
+            {saving ? "Guardando…" : "Guardar"}
+          </Button>
+        </form>
+      </div>
+    </>,
+    document.body,
   );
 }
