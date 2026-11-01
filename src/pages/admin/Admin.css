@@ -543,3 +543,19 @@
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* Acciones dentro de cada alerta de Inicio. */
+.admin-alert__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.admin-alert__actions .admin-manage__action {
+  height: 32px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+}

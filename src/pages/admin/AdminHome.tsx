@@ -9,6 +9,7 @@ import { useLiveAsync } from "../../utils/useLiveAsync";
 import { AdminStatus } from "./AdminStatus";
 import { exportAppReport } from "./exportReport";
 import { UsageChart } from "./UsageChart";
+import { useAdminActions } from "./useAdminActions";
 import "./Admin.css";
 
 const inactiveText = (days: number | null) =>
@@ -18,15 +19,17 @@ const inactiveText = (days: number | null) =>
 export function AdminHome() {
   const snapshot = useLiveAsync(getAdminSnapshot, [], null);
   if (!snapshot.data) return <AdminStatus title="Hola, Administradora" state={snapshot} />;
-  return <AdminHomeView snapshot={snapshot.data} />;
+  return <AdminHomeView snapshot={snapshot.data} onChanged={snapshot.reload} />;
 }
 
-function AdminHomeView({ snapshot }: { snapshot: AdminSnapshot }) {
+function AdminHomeView({ snapshot, onChanged }: { snapshot: AdminSnapshot; onChanged: () => void }) {
   const { teams } = snapshot;
   const report = getUsageReport(snapshot, teams);
   const inactiveById = new Map(report.alerts.map((a) => [a.member.id, a.daysInactive]));
   const { showToast } = useToast();
   const [exporting, setExporting] = useState(false);
+  // Sacar del equipo / eliminar cuenta directamente desde las alertas (mismas acciones que en Equipos).
+  const actions = useAdminActions(onChanged);
 
   async function exportReport() {
     setExporting(true);
@@ -159,12 +162,32 @@ function AdminHomeView({ snapshot }: { snapshot: AdminSnapshot }) {
                   <span className="admin-alert__detail">
                     {alert.team.name} · {inactiveText(alert.daysInactive)}
                   </span>
+                  <span className="admin-alert__actions">
+                    <button
+                      type="button"
+                      className="admin-manage__action"
+                      disabled={actions.busy}
+                      onClick={() => actions.request({ kind: "remove", member: alert.member, team: alert.team })}
+                    >
+                      Sacar del equipo
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-manage__action is-danger"
+                      disabled={actions.busy}
+                      onClick={() => actions.request({ kind: "delete-user", member: alert.member, team: alert.team })}
+                    >
+                      Eliminar cuenta
+                    </button>
+                  </span>
                 </span>
               </li>
             ))}
           </ul>
         )}
       </section>
+
+      {actions.sheet}
 
     </main>
   );

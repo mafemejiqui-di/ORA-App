@@ -1,12 +1,11 @@
 import { useState, type ReactNode } from "react";
 import { Avatar } from "../../components/Avatar";
-import { ConfirmSheet } from "../../components/ConfirmSheet";
-import { useToast } from "../../components/Toast";
 import { getGeneration } from "../../data/catalogs";
-import { ApiError, deleteTeam, deleteUserAccount, getTeamTotems, removeMemberFromTeam } from "../../data/api";
+import { getTeamTotems } from "../../data/api";
 import type { TeamMember } from "../../data/teamData";
 import type { Team, Totem } from "../../data/types";
 import { useAsync } from "../../utils/useAsync";
+import { useAdminActions } from "./useAdminActions";
 
 type TeamManageProps = {
   team: Team;
@@ -19,11 +18,6 @@ type TeamManageProps = {
   onChanged: () => void;
 };
 
-type Pending =
-  | { kind: "remove"; member: TeamMember }
-  | { kind: "delete-user"; member: TeamMember }
-  | { kind: "delete-team" };
-
 // Las preguntas del Tótem, con los mismos textos que ve cada integrante al responderlo.
 const TOTEM_ROWS: { label: string; key: keyof Omit<Totem, "savedAt"> }[] = [
   { label: "Frente a un proyecto del equipo, lo primero que hace", key: "persona" },
@@ -35,37 +29,11 @@ const TOTEM_ROWS: { label: string; key: keyof Omit<Totem, "savedAt"> }[] = [
 /** Contenido de un equipo en Equipos (admin): integrantes con su Tótem y acciones, patrones y eliminar equipo. */
 export function TeamManage({ team, members, inactiveById, patterns, onChanged }: TeamManageProps) {
   const totems = useAsync(() => getTeamTotems(team.id), [team.id]);
-  const { showToast } = useToast();
   const [openId, setOpenId] = useState<string | null>(null);
-  const [pending, setPending] = useState<Pending | null>(null);
-  const [busy, setBusy] = useState(false);
-
-  async function confirm() {
-    if (!pending) return;
-    const action = pending;
-    setPending(null);
-    setBusy(true);
-    try {
-      if (action.kind === "remove") {
-        await removeMemberFromTeam(action.member.id);
-        showToast(`${action.member.name} ya no está en ${team.name}.`, "primary");
-      } else if (action.kind === "delete-user") {
-        await deleteUserAccount(action.member.id);
-        showToast(`Se eliminó la cuenta de ${action.member.name}.`, "primary");
-      } else {
-        await deleteTeam(team.id);
-        showToast(`Se eliminó el equipo ${team.name}.`, "primary");
-      }
-      setOpenId(null);
-      onChanged();
-    } catch (err) {
-      showToast(err instanceof ApiError ? err.message : "No pudimos hacerlo. Inténtalo de nuevo.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  const sheet = pending && confirmCopy(pending, team, members.length);
+  const { busy, request, sheet } = useAdminActions(() => {
+    setOpenId(null);
+    onChanged();
+  });
 
   return (
     <div className="admin-manage">
@@ -130,7 +98,7 @@ export function TeamManage({ team, members, inactiveById, patterns, onChanged }:
                         type="button"
                         className="admin-manage__action"
                         disabled={busy}
-                        onClick={() => setPending({ kind: "remove", member })}
+                        onClick={() => request({ kind: "remove", member, team })}
                       >
                         Sacar del equipo
                       </button>
@@ -138,7 +106,7 @@ export function TeamManage({ team, members, inactiveById, patterns, onChanged }:
                         type="button"
                         className="admin-manage__action is-danger"
                         disabled={busy}
-                        onClick={() => setPending({ kind: "delete-user", member })}
+                        onClick={() => request({ kind: "delete-user", member, team })}
                       >
                         Eliminar cuenta
                       </button>
@@ -158,46 +126,12 @@ export function TeamManage({ team, members, inactiveById, patterns, onChanged }:
         type="button"
         className="admin-manage__delete-team"
         disabled={busy}
-        onClick={() => setPending({ kind: "delete-team" })}
+        onClick={() => request({ kind: "delete-team", team, memberCount: members.length })}
       >
         Eliminar equipo
       </button>
 
-      <ConfirmSheet
-        open={sheet !== null}
-        title={sheet?.title ?? ""}
-        message={sheet?.message ?? ""}
-        confirmLabel={sheet?.confirmLabel ?? ""}
-        cancelLabel="Cancelar"
-        onConfirm={() => void confirm()}
-        onCancel={() => setPending(null)}
-      />
+      {sheet}
     </div>
   );
-}
-
-function confirmCopy(pending: Pending, team: Team, memberCount: number) {
-  if (pending.kind === "remove") {
-    return {
-      title: `¿Sacar a ${pending.member.name} de ${team.name}?`,
-      message: "Conservará su cuenta y quedará sin equipo. Podrá volver a unirse con el código del equipo.",
-      confirmLabel: "Sacar del equipo",
-    };
-  }
-  if (pending.kind === "delete-user") {
-    return {
-      title: `¿Eliminar la cuenta de ${pending.member.name}?`,
-      message: "Se borrarán su cuenta, su Tótem y todos sus registros. Esto no se puede deshacer.",
-      confirmLabel: "Eliminar cuenta",
-    };
-  }
-  const people =
-    memberCount === 0
-      ? "No tiene integrantes."
-      : `${memberCount === 1 ? "Su integrante conservará su cuenta y quedará" : `Sus ${memberCount} integrantes conservarán su cuenta y quedarán`} sin equipo.`;
-  return {
-    title: `¿Eliminar el equipo ${team.name}?`,
-    message: `Se borrarán sus ciclos, respuestas y lecturas. ${people} Esto no se puede deshacer.`,
-    confirmLabel: "Eliminar equipo",
-  };
 }
