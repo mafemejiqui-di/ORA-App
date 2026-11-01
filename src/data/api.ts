@@ -293,6 +293,14 @@ export function updateSettings(current: UserSettings | undefined, patch: Partial
   });
 }
 
+/** Cambia el nombre de usuario (el que ve el equipo). */
+export function updateName(name: string): Promise<Session> {
+  return mutate(async () => {
+    const userId = await currentUserId();
+    unwrap(await supabase.from("profiles").update({ name: name.trim() }).eq("id", userId));
+  });
+}
+
 /** Guarda el ritual de un día (YYYY-MM-DD). Si ya había uno ese día, lo reemplaza. */
 export function saveRitual(date: string, entry: RitualEntry): Promise<Session> {
   return mutate(async () => {

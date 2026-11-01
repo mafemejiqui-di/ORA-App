@@ -11,6 +11,7 @@ import {
   saveDiagnosis,
   saveRitual,
   saveTotem,
+  updateName,
   updateSettings,
   type RegisterInput,
   type Session,
@@ -28,6 +29,8 @@ type AuthValue = {
   login: (email: string, password: string) => Promise<User>;
   saveTotem: (totem: Totem) => Promise<void>;
   updateSettings: (patch: Partial<UserSettings>) => Promise<void>;
+  /** Cambia el nombre de usuario. */
+  updateName: (name: string) => Promise<void>;
   /** Guarda el ritual del día de `date` (por defecto, hoy). */
   saveRitual: (entry: RitualEntry, date?: Date) => Promise<void>;
   /** Une a la persona a un equipo con su código; devuelve el equipo. */
@@ -98,6 +101,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [session, apply],
   );
 
+  const updateUserName = useCallback(async (name: string) => void apply(await updateName(name)), [apply]);
+
   const saveUserRitual = useCallback(
     async (entry: RitualEntry, date = new Date()) => void apply(await saveRitual(toLocalIso(date), entry)),
     [apply],
@@ -126,6 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       saveTotem: saveUserTotem,
       updateSettings: updateUserSettings,
+      updateName: updateUserName,
       saveRitual: saveUserRitual,
       joinTeam: joinUserTeam,
       saveDiagnosis: saveUserDiagnosis,
@@ -140,6 +146,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       saveUserTotem,
       updateUserSettings,
+      updateUserName,
       saveUserRitual,
       joinUserTeam,
       saveUserDiagnosis,

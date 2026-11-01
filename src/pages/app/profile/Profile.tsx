@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logoOra from "../../../assets/ora-logo.png";
+import pencilIcon from "../../../assets/icons/pencil.svg";
 import totemTriangle from "../../../assets/icons/totem-triangle-24.svg";
 import { Avatar } from "../../../components/Avatar";
 import { ConfirmSheet } from "../../../components/ConfirmSheet";
+import { NameSheet } from "../../../components/NameSheet";
 import { Tag } from "../../../components/Tag";
 import { useToast } from "../../../components/Toast";
 import { Toggle } from "../../../components/Toggle";
@@ -18,9 +20,11 @@ const EMPTY_VALUE = "—";
 
 export function Profile() {
   const navigate = useNavigate();
-  const { user, team, logout, updateSettings } = useAuth();
+  const { user, team, logout, updateSettings, updateName } = useAuth();
   const { startEdit } = useTotemDraft();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [nameOpen, setNameOpen] = useState(false);
+  const closeName = useCallback(() => setNameOpen(false), []);
   const { showToast } = useToast();
   // Estado de las notificaciones en ESTE celular (cada aparato se activa por separado).
   const [push, setPush] = useState<PushStatus | null>(null);
@@ -77,6 +81,12 @@ export function Profile() {
     navigate("/totem/1");
   }
 
+  async function saveName(name: string) {
+    await updateName(name);
+    setNameOpen(false);
+    showToast("Tu nombre se actualizó.", "primary");
+  }
+
   function confirmLogout() {
     logout();
     navigate("/", { replace: true });
@@ -87,6 +97,9 @@ export function Profile() {
       <header className="profile__hero">
         <Avatar name={user.name} size="lg" />
         <h1 className="profile__name">{user.name}</h1>
+        <button type="button" className="profile__name-edit" aria-label="Editar mi nombre" onClick={() => setNameOpen(true)}>
+          <img src={pencilIcon} width={16} height={16} alt="" />
+        </button>
         <p className="profile__role">{subtitle}</p>
         <img className="profile__logo" src={logoOra} width={45} height={16} alt="ORA" />
       </header>
@@ -144,6 +157,8 @@ export function Profile() {
           </li>
         </ul>
       </section>
+
+      <NameSheet open={nameOpen} currentName={user.name} onSave={saveName} onClose={closeName} />
 
       <ConfirmSheet
         open={confirmOpen}
