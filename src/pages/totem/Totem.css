@@ -123,6 +123,24 @@
   line-height: 30.8px;
 }
 
+.totem-question__title--with-subtitle {
+  margin-bottom: 6px;
+}
+
+/* Ayuda bajo el título (pregunta 3): más pequeña, con el ejemplo en azul. */
+.totem-question__subtitle {
+  max-width: 320px;
+  margin: 0 0 20px;
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.totem-question__example {
+  display: block;
+  color: var(--color-primary);
+}
+
 .totem-field + .totem-field {
   margin-top: 26.64px;
 }

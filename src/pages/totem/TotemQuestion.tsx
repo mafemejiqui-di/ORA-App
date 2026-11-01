@@ -11,6 +11,8 @@ type TotemQuestionProps = {
   step: number;
   dimension: string;
   title: string;
+  /** Línea de ayuda bajo el título, en letra más pequeña. */
+  subtitle?: ReactNode;
   ctaLabel: string;
   busy?: boolean;
   onBack: () => void;
@@ -19,7 +21,17 @@ type TotemQuestionProps = {
 };
 
 /** Estructura común de las tres preguntas: contador, etiqueta, título, campos y progreso. */
-export function TotemQuestion({ step, dimension, title, ctaLabel, busy = false, onBack, onNext, children }: TotemQuestionProps) {
+export function TotemQuestion({
+  step,
+  dimension,
+  title,
+  subtitle,
+  ctaLabel,
+  busy = false,
+  onBack,
+  onNext,
+  children,
+}: TotemQuestionProps) {
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
     onNext();
@@ -41,7 +53,10 @@ export function TotemQuestion({ step, dimension, title, ctaLabel, busy = false, 
       <div className="totem-question__tag">
         <Tag>{dimension}</Tag>
       </div>
-      <h1 className="totem-question__title">{title}</h1>
+      <h1 className={subtitle ? "totem-question__title totem-question__title--with-subtitle" : "totem-question__title"}>
+        {title}
+      </h1>
+      {subtitle && <p className="totem-question__subtitle">{subtitle}</p>}
       {children}
       <ProgressBar
         className="totem-question__progress"

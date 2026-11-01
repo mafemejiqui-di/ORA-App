@@ -29,7 +29,7 @@ export function TotemQuestion1() {
     <TotemQuestion
       step={1}
       dimension="Persona"
-      title="¿Qué patrones repites de liderazgo?"
+      title="Frente a un proyecto del equipo, ¿qué es lo primero que haces?"
       ctaLabel="Siguiente"
       // Al modificarlo desde Perfil, volver regresa al Perfil sin guardar cambios.
       onBack={() => {
@@ -42,7 +42,7 @@ export function TotemQuestion1() {
     >
       <TextArea
         ref={field}
-        label="Patrones de liderazgo que repites"
+        label="Lo primero que haces frente a un proyecto del equipo"
         placeholder="Escribe aquí..."
         aria-required="true"
         value={draft.persona}
@@ -80,21 +80,21 @@ export function TotemQuestion2() {
     <TotemQuestion
       step={2}
       dimension="Equipo"
-      title="¿Qué aportas y qué no estás dando?"
+      title="¿Qué le aportas a tu equipo cuando trabajan juntos?"
       ctaLabel="Siguiente"
       onBack={() => navigate("/totem/1")}
       onNext={next}
     >
       <div className="totem-field">
         <label className="totem-field__label" htmlFor="totem-sobra">
-          Le sobra de mí...
+          Lo que yo aporto…
         </label>
         <TextArea
           ref={sobraField}
           id="totem-sobra"
-          label="Lo que sobra de mí en el equipo"
+          label="Lo que yo aporto"
           size="short"
-          placeholder="¿Qué das en exceso?"
+          placeholder="Escribe aquí..."
           aria-required="true"
           value={draft.equipoSobra}
           error={errors.sobra}
@@ -106,14 +106,14 @@ export function TotemQuestion2() {
       </div>
       <div className="totem-field">
         <label className="totem-field__label" htmlFor="totem-falta">
-          Le falta de mí...
+          Lo que el equipo necesita de mí…
         </label>
         <TextArea
           ref={faltaField}
           id="totem-falta"
-          label="Lo que le falta de mí al equipo"
+          label="Lo que el equipo necesita de mí"
           size="short"
-          placeholder="¿Qué retienes sin darte cuenta?"
+          placeholder="Escribe aquí..."
           aria-required="true"
           value={draft.equipoFalta}
           error={errors.falta}
@@ -174,6 +174,12 @@ export function TotemQuestion3() {
       step={3}
       dimension="Acción"
       title="Hoy lidero desde..."
+      subtitle={
+        <>
+          ¿Desde qué postura quieres liderar?
+          <span className="totem-question__example">(Ejemplo: “Desde la escucha antes de decidir”)</span>
+        </>
+      }
       ctaLabel={editing ? "Guardar cambios" : "Guardar mi tótem"}
       busy={busy}
       onBack={() => navigate("/totem/2")}
