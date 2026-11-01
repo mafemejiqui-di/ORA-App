@@ -28,6 +28,9 @@ export type ApiErrorCode =
   | "no-team"
   | "not-authenticated"
   | "confirm-email"
+  | "forbidden"
+  | "cannot-manage-admin"
+  | "not-found"
   | "network"
   | "unknown";
 
@@ -41,6 +44,9 @@ const MESSAGES: Record<ApiErrorCode, string> = {
   "no-team": "Únete a un equipo para empezar tu ciclo.",
   "not-authenticated": "Tu sesión ya no es válida. Inicia sesión de nuevo.",
   "confirm-email": "Revisa tu correo para confirmar la cuenta y luego inicia sesión.",
+  forbidden: "No tienes permiso para hacer esto.",
+  "cannot-manage-admin": "No se puede sacar ni eliminar a una administradora.",
+  "not-found": "Ya no existe: puede que alguien lo haya eliminado antes.",
   network: "No hay conexión con el servidor. Revisa tu internet e inténtalo de nuevo.",
   unknown: "Algo salió mal. Inténtalo de nuevo.",
 };
@@ -567,6 +573,50 @@ export async function getAdminTensionShares(days = 14): Promise<AdminTensionRepo
   try {
     const data = unwrap(await supabase.rpc("get_admin_tension_shares", { p_days: days })) as AdminTensionReport | null;
     return { days, teams: data?.teams ?? {}, overall: data?.overall ?? null };
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
+
+type TotemRow = { user_id: string; persona: string; equipo_sobra: string; equipo_falta: string; accion: string; saved_at: string };
+
+/** Tótem de cada integrante del equipo, por id de persona (solo la admin; ver supabase/07_admin_manage.sql). */
+export async function getTeamTotems(teamId: string): Promise<Record<string, Totem>> {
+  try {
+    const rows = unwrap(await supabase.rpc("admin_get_team_totems", { p_team: teamId })) as TotemRow[] | null;
+    return Object.fromEntries(
+      (rows ?? []).map((t) => [
+        t.user_id,
+        { persona: t.persona, equipoSobra: t.equipo_sobra, equipoFalta: t.equipo_falta, accion: t.accion, savedAt: t.saved_at },
+      ]),
+    );
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
+
+/** Saca a la persona de su equipo: la cuenta sigue y queda sin equipo. */
+export async function removeMemberFromTeam(userId: string): Promise<void> {
+  try {
+    unwrap(await supabase.rpc("admin_remove_member", { p_user: userId }));
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
+
+/** Elimina la cuenta de la persona y todos sus registros (no se puede deshacer). */
+export async function deleteUserAccount(userId: string): Promise<void> {
+  try {
+    unwrap(await supabase.rpc("admin_delete_user", { p_user: userId }));
+  } catch (err) {
+    throw toApiError(err);
+  }
+}
+
+/** Elimina el equipo con sus ciclos y respuestas; sus integrantes quedan sin equipo. */
+export async function deleteTeam(teamId: string): Promise<void> {
+  try {
+    unwrap(await supabase.rpc("admin_delete_team", { p_team: teamId }));
   } catch (err) {
     throw toApiError(err);
   }

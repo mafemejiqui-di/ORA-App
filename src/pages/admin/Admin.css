@@ -408,3 +408,138 @@
     transition: none;
   }
 }
+
+/* Gestión de un equipo (Equipos): integrantes con su Tótem, sacar/eliminar y eliminar equipo. */
+.admin-manage__label {
+  margin: 0 0 4px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.admin-manage__label--spaced {
+  margin: 20px 0 10px;
+}
+
+.admin-manage .admin-members {
+  margin-top: 8px;
+}
+
+.admin-manage__member {
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.admin-manage__member:last-child {
+  border-bottom: 0;
+}
+
+.admin-manage__toggle {
+  width: 100%;
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-manage__toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.admin-manage__toggle[aria-expanded="true"] .admin-accordion__chevron {
+  transform: rotate(-135deg);
+}
+
+.admin-manage__toggle .admin-accordion__chevron {
+  width: 8px;
+  height: 8px;
+  margin-left: 4px;
+}
+
+.admin-manage__detail {
+  margin: 4px 0 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--color-surface-soft);
+}
+
+.admin-manage__muted {
+  margin: 4px 0 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.admin-totem {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 6px 0 0;
+}
+
+.admin-totem__row dt {
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.admin-totem__row dd {
+  margin: 2px 0 0;
+  color: var(--color-text-strong);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 19px;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.admin-manage__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.admin-manage__action,
+.admin-manage__delete-team {
+  height: 40px;
+  padding: 0 10px;
+  border: 1.156px solid var(--color-primary);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-manage__action.is-danger,
+.admin-manage__delete-team {
+  border-color: var(--color-rose-dark);
+  color: var(--color-rose-dark);
+}
+
+.admin-manage__delete-team {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.admin-manage__action:disabled,
+.admin-manage__delete-team:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.admin-manage__action:focus-visible,
+.admin-manage__delete-team:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
