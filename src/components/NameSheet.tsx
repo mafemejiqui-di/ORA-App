@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { Button } from "./Button";
 import { TextField } from "./TextField";
 import "./NameSheet.css";
@@ -19,6 +19,27 @@ export function NameSheet({ open, currentName, onSave, onClose }: NameSheetProps
   const [value, setValue] = useState(currentName);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [viewport, setViewport] = useState<CSSProperties | undefined>();
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  // El fondo ocupa solo la parte visible de la pantalla (sin el teclado), así la tarjeta
+  // queda justo encima del teclado en cualquier celular, también en iPhone donde la página no se encoge.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!open || !vv) return;
+    const update = () => {
+      setViewport({ top: vv.offsetTop, height: vv.height, bottom: "auto" });
+      // Si al área visible le falta un buen pedazo de la pantalla, es porque el teclado está abierto.
+      setKeyboardOpen(window.innerHeight - vv.height > 120);
+    };
+    update();
+    vv.addEventListener("resize", update);
+    vv.addEventListener("scroll", update);
+    return () => {
+      vv.removeEventListener("resize", update);
+      vv.removeEventListener("scroll", update);
+    };
+  }, [open]);
 
   // Cada vez que se abre arranca con el nombre actual (y no se reinicia mientras se escribe).
   useEffect(() => {
@@ -65,7 +86,11 @@ export function NameSheet({ open, currentName, onSave, onClose }: NameSheetProps
   }
 
   return (
-    <div className="name-sheet-overlay" onClick={onClose}>
+    <div
+      className={keyboardOpen ? "name-sheet-overlay name-sheet-overlay--keyboard" : "name-sheet-overlay"}
+      style={viewport}
+      onClick={onClose}
+    >
       <form
         className="name-sheet"
         role="dialog"
