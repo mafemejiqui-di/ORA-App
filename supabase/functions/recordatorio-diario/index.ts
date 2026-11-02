@@ -1,5 +1,5 @@
 // ORA · Edge Function "recordatorio-diario"
-// Envía el recordatorio diario (ritual + "Tomar una decisión") como notificación del celular.
+// Envía el recordatorio diario del ritual como notificación del celular.
 //
 // - La llama la tarea programada "ora-recordatorio-diario" (06_push.sql) entre las 8:00 y las
 //   8:45 a. m. hora de Colombia. Solo envía después de las 8:00 y una vez por día a cada celular.
@@ -15,7 +15,7 @@ const SEND_FROM_HOUR = 8;
 
 const PAYLOAD = JSON.stringify({
   title: "ORA",
-  body: "Tu ritual diario te espera. Si hoy enfrentas una decisión con tu equipo, regístrala en «Tomar una decisión».",
+  body: "Tu ritual diario te espera.",
   url: "/ritual",
   tag: "ora-recordatorio",
 });
