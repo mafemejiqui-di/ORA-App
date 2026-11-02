@@ -4,6 +4,7 @@ import flame from "../../../assets/icons/flame.svg";
 import { useToast } from "../../../components/Toast";
 import { WeekRing } from "../../../components/WeekRing";
 import { getTeamInsights, getTeamMembers, type CycleSummary, type TeamDashboard } from "../../../data/api";
+import { RITUAL_WINDOW_DAYS } from "../../../data/ritual";
 import { useAuth } from "../../../state/AuthContext";
 import { useTeamDashboard } from "../../../state/useTeamDashboard";
 import { CYCLE_DAYS, CYCLE_WEEKS, days, getCycleStatus, isLeader } from "../../../utils/cycle";
@@ -65,7 +66,7 @@ export function Cycle() {
 
   // El Ritual diario sale de los rituales que la persona ha completado.
   const stats = user ? getRitualStats(user) : null;
-  const ritual = { done: stats?.doneInWindow ?? 0, total: stats?.total ?? 28 };
+  const ritual = { done: stats?.doneInWindow ?? 0, total: stats?.total ?? RITUAL_WINDOW_DAYS };
   const ritualPercent = Math.round((ritual.done / ritual.total) * 100);
   const cycle = getCycleStatus(team);
 

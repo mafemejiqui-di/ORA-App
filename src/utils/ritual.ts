@@ -7,7 +7,7 @@ export type WeekDot = "completed" | "today" | "today-done" | "empty";
 export type RitualStats = {
   streak: number;
   record: number;
-  /** Días con ritual en los últimos 28 días (incluido hoy). */
+  /** Días con ritual en los últimos 21 días (incluido hoy). */
   doneInWindow: number;
   total: number;
   completedToday: boolean;

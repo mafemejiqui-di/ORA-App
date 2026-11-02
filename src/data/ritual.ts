@@ -49,5 +49,5 @@ export const INTENCION_OPTIONS: readonly string[] = [
   "Ninguna en particular",
 ];
 
-/** El ciclo se mide sobre 28 días (4 semanas), como "12 de 28 días" en Figma. */
-export const RITUAL_WINDOW_DAYS = 28;
+/** El ritual se mide sobre 21 días (3 semanas, lo que dura un ciclo), p. ej. "12 de 21 días". */
+export const RITUAL_WINDOW_DAYS = 21;
