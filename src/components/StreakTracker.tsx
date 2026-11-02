@@ -4,19 +4,20 @@ import "./StreakTracker.css";
 type StreakTrackerProps = {
   currentStreak: number;
   record: number;
-  /** Lunes a domingo. */
+  /** Lunes a viernes (solo días laborales). */
   weekDots: WeekDot[];
   /** Anima el punto de hoy (al completar el ritual). */
   popToday?: boolean;
 };
 
-const DAY_NAMES = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+const DAY_NAMES = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
 
 const DOT_TEXT: Record<WeekDot, string> = {
   completed: "completado",
   today: "hoy, pendiente",
   "today-done": "hoy, completado",
   empty: "sin ritual",
+  holiday: "festivo, no cuenta",
 };
 
 export function StreakTracker({ currentStreak, record, weekDots, popToday = false }: StreakTrackerProps) {

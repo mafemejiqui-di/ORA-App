@@ -1,22 +1,27 @@
 import { RITUAL_WINDOW_DAYS } from "../data/ritual";
 import type { RitualEntry, User } from "../data/types";
+import { isHoliday, isWorkday, previousWorkday } from "./workdays";
 
-/** Estado de cada punto de la semana. "today" = hoy pendiente; "today-done" = hoy ya completado. */
-export type WeekDot = "completed" | "today" | "today-done" | "empty";
+/**
+ * Estado de cada punto de la semana. "today" = hoy pendiente; "today-done" = hoy ya completado;
+ * "holiday" = festivo entre semana (no cuenta).
+ */
+export type WeekDot = "completed" | "today" | "today-done" | "empty" | "holiday";
 
 export type RitualStats = {
+  /** Días laborales seguidos con ritual (fines de semana y festivos ni suman ni cortan). */
   streak: number;
   record: number;
-  /** Días con ritual en los últimos 21 días (incluido hoy). */
+  /** Días laborales con ritual en los últimos 21 días (incluido hoy). */
   doneInWindow: number;
+  /** Días laborales en esos 21 días (normalmente 15; menos si hubo festivos). */
   total: number;
+  /** Si hizo el ritual hoy, aunque hoy no sea día laboral. */
   completedToday: boolean;
   todayEntry: RitualEntry | null;
-  /** Lunes a domingo de la semana actual. */
+  /** Lunes a viernes de la semana actual. */
   weekDots: WeekDot[];
 };
-
-const MS_PER_DAY = 86_400_000;
 
 /** Fecha local como YYYY-MM-DD (no UTC: el día cambia a medianoche local). */
 export function toLocalIso(date: Date) {
@@ -36,42 +41,50 @@ function parseIso(iso: string) {
   return new Date(year, month - 1, day);
 }
 
-/** Racha más larga de días consecutivos dentro de un conjunto de fechas. */
-function longestRun(days: Set<string>) {
-  const sorted = [...days].sort();
+/** Racha más larga de días laborales seguidos dentro de un conjunto de fechas (ya solo laborales). */
+function longestRun(workdays: Set<string>) {
+  const sorted = [...workdays].sort();
   let best = 0;
   let run = 0;
-  let previous: Date | null = null;
+  let previous: string | null = null;
   for (const iso of sorted) {
-    const current = parseIso(iso);
-    run = previous && Math.round((current.getTime() - previous.getTime()) / MS_PER_DAY) === 1 ? run + 1 : 1;
+    run = previous && toLocalIso(previousWorkday(parseIso(iso))) === previous ? run + 1 : 1;
     best = Math.max(best, run);
-    previous = current;
+    previous = iso;
   }
   return best;
 }
 
 export function getRitualStats(user: User, now = new Date()): RitualStats {
   const todayIso = toLocalIso(now);
-  const days = new Set(Object.keys(user.rituals ?? {}));
-  const completedToday = days.has(todayIso);
+  const allDays = Object.keys(user.rituals ?? {});
+  const completedToday = allDays.includes(todayIso);
+  // Solo cuentan los rituales hechos en día laboral.
+  const days = new Set(allDays.filter((iso) => isWorkday(parseIso(iso))));
 
-  // La racha sigue viva si hiciste el ritual hoy o ayer.
+  // La racha sigue viva si hiciste el ritual hoy o el día laboral anterior
+  // (p. ej. el lunes todavía vale la del viernes).
   let streak = 0;
-  let cursor = completedToday ? now : addDays(now, -1);
+  let cursor = days.has(todayIso) ? now : previousWorkday(now);
   while (days.has(toLocalIso(cursor))) {
     streak++;
-    cursor = addDays(cursor, -1);
+    cursor = previousWorkday(cursor);
   }
 
   let doneInWindow = 0;
+  let total = 0;
   for (let i = 0; i < RITUAL_WINDOW_DAYS; i++) {
-    if (days.has(toLocalIso(addDays(now, -i)))) doneInWindow++;
+    const day = addDays(now, -i);
+    if (!isWorkday(day)) continue;
+    total++;
+    if (days.has(toLocalIso(day))) doneInWindow++;
   }
 
   const monday = addDays(now, -((now.getDay() + 6) % 7));
-  const weekDots = Array.from({ length: 7 }, (_, i): WeekDot => {
-    const iso = toLocalIso(addDays(monday, i));
+  const weekDots = Array.from({ length: 5 }, (_, i): WeekDot => {
+    const day = addDays(monday, i);
+    const iso = toLocalIso(day);
+    if (isHoliday(day)) return "holiday";
     if (iso === todayIso) return completedToday ? "today-done" : "today";
     return days.has(iso) ? "completed" : "empty";
   });
@@ -80,7 +93,7 @@ export function getRitualStats(user: User, now = new Date()): RitualStats {
     streak,
     record: Math.max(longestRun(days), streak),
     doneInWindow,
-    total: RITUAL_WINDOW_DAYS,
+    total,
     completedToday,
     todayEntry: user.rituals?.[todayIso] ?? null,
     weekDots,

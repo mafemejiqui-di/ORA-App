@@ -69,6 +69,12 @@
   background: var(--color-rose-dark);
 }
 
+/* Festivo entre semana: no cuenta; aro punteado y tenue. */
+.streak__dot--holiday {
+  border-style: dashed;
+  opacity: 0.55;
+}
+
 /* Rebote al completar: 0.8 → 1.2 → 1 en 400 ms. */
 .streak__dot.is-pop {
   animation: streak-pop 400ms ease-out;

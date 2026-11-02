@@ -160,7 +160,7 @@ export async function exportMyHistory(
   const stats = getRitualStats(user, now);
   const rituals = Object.entries(user.rituals ?? {}).sort(([a], [b]) => b.localeCompare(a));
   pdf.heading("Ritual diario");
-  pdf.text(`Racha actual: ${stats.streak} · Récord: ${stats.record} · ${stats.doneInWindow} de ${stats.total} días en las últimas 3 semanas`, {
+  pdf.text(`Racha actual: ${stats.streak} · Récord: ${stats.record} · ${stats.doneInWindow} de ${stats.total} días laborales en las últimas 3 semanas`, {
     size: 9.5,
     indent: 3,
   });
