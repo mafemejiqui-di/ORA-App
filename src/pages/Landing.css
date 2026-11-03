@@ -18,8 +18,9 @@
   max-width: none;
 }
 
+/* Corrido 15 px a la derecha del Figma para que su borde caiga justo en el palo de la "R". */
 .landing__circle--rose-267 {
-  left: -136px;
+  left: -121px;
   top: 247px;
 }
 
@@ -63,7 +64,9 @@
   /* A la misma distancia de los anillos en todo celular (el anillo de la izquierda entra en la "R"). */
   margin-top: 343px;
   padding: 0 20px;
-  background: var(--color-bg);
+  /* El fondo empieza 9 px más abajo (ya dentro de la "R", cuya tinta arranca a los 5 px): así el
+     anillo llega hasta la letra y su corte queda escondido debajo de ella. */
+  background: linear-gradient(to bottom, transparent 9px, var(--color-bg) 9px);
 }
 
 .landing__logo {
