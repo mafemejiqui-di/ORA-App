@@ -18,10 +18,16 @@
   max-width: none;
 }
 
-/* Corrido 15 px a la derecha del Figma para que su borde caiga justo en el palo de la "R". */
+/*
+ * Como en el diseño, este anillo termina en punta afilada justo encima de la "R": un "mordisco"
+ * circular de 18.5 px de radio, centrado en la esquina superior izquierda de la letra (255 px,
+ * 103 px dentro de este anillo), corta el anillo en curva y deja un hueco color fondo hasta la letra.
+ */
 .landing__circle--rose-267 {
-  left: -121px;
+  left: -136px;
   top: 247px;
+  -webkit-mask-image: radial-gradient(circle 18.5px at 255px 103px, transparent 18px, #000 18.5px);
+  mask-image: radial-gradient(circle 18.5px at 255px 103px, transparent 18px, #000 18.5px);
 }
 
 .landing__circle--rose-318 {
@@ -64,9 +70,7 @@
   /* A la misma distancia de los anillos en todo celular (el anillo de la izquierda entra en la "R"). */
   margin-top: 343px;
   padding: 0 20px;
-  /* El fondo empieza 9 px más abajo (ya dentro de la "R", cuya tinta arranca a los 5 px): así el
-     anillo llega hasta la letra y su corte queda escondido debajo de ella. */
-  background: linear-gradient(to bottom, transparent 9px, var(--color-bg) 9px);
+  background: var(--color-bg);
 }
 
 .landing__logo {
