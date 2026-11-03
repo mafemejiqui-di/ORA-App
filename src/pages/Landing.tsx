@@ -50,7 +50,15 @@ export function Landing() {
         />
       </div>
 
-      <header className="landing__header">
+      {/* Logo grande en el centro (los anillos lo cruzan por encima), título y frase debajo. */}
+      <header className="landing__brand">
+        <img
+          className="landing__logo"
+          src={logoOra}
+          width={574}
+          height={203}
+          alt="ORA"
+        />
         <h1 className="landing__phase">
           <span className="landing__phase-number">03 </span>Fase Ciclo
         </h1>
@@ -60,13 +68,6 @@ export function Landing() {
       </header>
 
       <div className="landing__footer">
-        <img
-          className="landing__logo"
-          src={logoOra}
-          width={272}
-          height={110}
-          alt="ORA"
-        />
         <div className="landing__actions">
           <Button variant="primary" onClick={() => navigate("/registro/1")}>
             Crear cuenta
