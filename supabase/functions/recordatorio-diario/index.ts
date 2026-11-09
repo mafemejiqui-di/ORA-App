@@ -6,6 +6,9 @@
 // - No se envía a quien ya hizo el ritual de hoy ni a quien apagó el recordatorio en Perfil.
 // - Solo se envía en días laborales: lunes a viernes que no sean festivo en Colombia (misma
 //   regla que src/utils/workdays.ts, donde la racha tampoco cuenta esos días).
+// - "Te extrañamos" (08_inactividad.sql): quien acaba de completar 3 días laborales seguidos sin
+//   usar la app recibe ese aviso EN LUGAR del recordatorio, una sola vez (al día siguiente ya son
+//   4 días y no se repite hasta que vuelva y otra vez pasen 3). Quien nunca usó la app no lo recibe.
 // - Secretos necesarios en Supabase → Edge Functions → Secrets (están en el archivo vapid.local):
 //     VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT
 //   SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY ya vienen incluidos en toda Edge Function.
@@ -21,6 +24,15 @@ const PAYLOAD = JSON.stringify({
   url: "/ritual",
   tag: "ora-recordatorio",
 });
+
+const MISS_YOU_PAYLOAD = JSON.stringify({
+  title: "ORA",
+  body: "Te extrañamos en ORA. Llevas 3 días sin pasar por la app: tómate un minuto para tu ritual.",
+  url: "/ritual",
+  tag: "ora-te-extranamos",
+});
+
+const INACTIVE_WORKDAYS = 3;
 
 // Festivos de Colombia (Ley 51 de 1983), en UTC: aquí las fechas se manejan como días de calendario.
 function colombianHolidays(year: number): Set<string> {
@@ -44,10 +56,32 @@ function colombianHolidays(year: number): Set<string> {
   );
 }
 
+/** Día laboral (YYYY-MM-DD) anterior a `iso`. */
+function previousWorkday(iso: string): string {
+  let date = new Date(`${iso}T00:00:00Z`);
+  for (;;) {
+    date = new Date(date.getTime() - 86_400_000);
+    const day = date.toISOString().slice(0, 10);
+    const weekday = date.getUTCDay();
+    if (weekday !== 0 && weekday !== 6 && !colombianHolidays(date.getUTCFullYear()).has(day)) return day;
+  }
+}
+
+/**
+ * ¿Hoy toca "Te extrañamos"? Sí, si en los 3 días laborales anteriores a hoy (y lo que haya entre
+ * ellos) no usó la app, pero sí la usó el día laboral anterior a esos 3 (o algún día después).
+ */
+function missYouToday(today: string, lastActive: string | null): boolean {
+  if (!lastActive) return false;
+  let firstMissed = today;
+  for (let i = 0; i < INACTIVE_WORKDAYS; i++) firstMissed = previousWorkday(firstMissed);
+  return lastActive < firstMissed && lastActive >= previousWorkday(firstMissed);
+}
+
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
-type Subscription = { id: string; endpoint: string; p256dh: string; auth: string };
+type Subscription = { id: string; endpoint: string; p256dh: string; auth: string; last_active: string | null };
 
 Deno.serve(async () => {
   try {
@@ -67,19 +101,21 @@ Deno.serve(async () => {
     const service = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
       auth: { persistSession: false },
     });
-    const { data, error } = await service.rpc("pending_ritual_reminders", { p_today: today });
+    const { data, error } = await service.rpc("pending_reminders", { p_today: today });
     if (error) throw error;
     const subs = (data ?? []) as Subscription[];
 
     const sent: string[] = [];
     const gone: string[] = [];
     let failed = 0;
+    let missYou = 0;
     const results = await Promise.allSettled(
-      subs.map((s) =>
-        webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, PAYLOAD, {
+      subs.map((s) => {
+        const payload = missYouToday(today, s.last_active) ? (missYou++, MISS_YOU_PAYLOAD) : PAYLOAD;
+        return webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, {
           TTL: 6 * 3600, // si el celular está apagado, se entrega hasta 6 horas después
-        }),
-      ),
+        });
+      }),
     );
     results.forEach((result, i) => {
       if (result.status === "fulfilled") sent.push(subs[i].id);
@@ -97,7 +133,7 @@ Deno.serve(async () => {
     if (sent.length) await service.from("push_subscriptions").update({ last_sent_on: today }).in("id", sent);
     if (gone.length) await service.from("push_subscriptions").delete().in("id", gone);
 
-    return json({ today, pending: subs.length, sent: sent.length, removed: gone.length, failed });
+    return json({ today, pending: subs.length, sent: sent.length, missYou, removed: gone.length, failed });
   } catch (err) {
     console.error(err);
     return json({ error: err instanceof Error ? err.message : String(err) }, 500);
