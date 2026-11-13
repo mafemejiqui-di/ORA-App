@@ -189,14 +189,26 @@
 }
 
 .admin-member__name {
-  display: block;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
   color: var(--color-text-strong);
   font-size: 13px;
   font-weight: 500;
   line-height: 18px;
+}
+
+/* El nombre se recorta con "…"; el código (UserCode) siempre se ve completo a su lado. */
+.admin-member__text {
+  overflow: hidden;
+  min-width: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.admin-alert__name {
+  display: block;
 }
 
 .admin-member__role {

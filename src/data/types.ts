@@ -68,6 +68,8 @@ export type User = {
   role: Role | null;
   generation: GenerationId | null;
   teamId: string | null;
+  /** Código único del perfil (ORA-0001), lo asigna la base de datos (09_user_codes.sql). */
+  code?: string | null;
   /** Perfil de administradora: ve todos los equipos (profiles.is_admin, se activa desde Supabase). */
   isAdmin?: boolean;
   /** Opcional porque las cuentas guardadas antes de esta fase no lo traen. */

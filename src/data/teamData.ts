@@ -8,6 +8,8 @@ export type TeamMember = {
   generation: GenerationId | null;
   /** Muestra el triángulo del Tótem junto al nombre. */
   hasTotem: boolean;
+  /** Código único del perfil (ORA-0001). */
+  code?: string | null;
 };
 
 // ── Mapa de puntos (Inicio) ───────────────────────────────────────────

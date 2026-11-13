@@ -9,6 +9,7 @@ import { NameSheet } from "../../../components/NameSheet";
 import { Tag } from "../../../components/Tag";
 import { useToast } from "../../../components/Toast";
 import { Toggle } from "../../../components/Toggle";
+import { UserCode } from "../../../components/UserCode";
 import { getGeneration } from "../../../data/catalogs";
 import { DEFAULT_SETTINGS } from "../../../data/types";
 import { disablePush, enablePush, getPushStatus, type PushStatus } from "../../../lib/push";
@@ -101,6 +102,11 @@ export function Profile() {
           <img src={pencilIcon} width={16} height={16} alt="" />
         </button>
         <p className="profile__role">{subtitle}</p>
+        {user.code && (
+          <p className="profile__code">
+            <UserCode code={user.code} size="md" />
+          </p>
+        )}
         <img className="profile__logo" src={logoOra} width={45} height={16} alt="ORA" />
       </header>
 

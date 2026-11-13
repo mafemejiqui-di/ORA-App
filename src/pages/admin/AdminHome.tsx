@@ -2,6 +2,7 @@ import { useState } from "react";
 import download from "../../assets/icons/download.svg";
 import { Avatar } from "../../components/Avatar";
 import { useToast } from "../../components/Toast";
+import { UserCode } from "../../components/UserCode";
 import { getGeneration } from "../../data/catalogs";
 import { getAdminSnapshot, type AdminSnapshot } from "../../data/api";
 import { getUsageReport, INACTIVE_ALERT_DAYS } from "../../utils/teamInsights";
@@ -97,7 +98,10 @@ function AdminHomeView({ snapshot, onChanged }: { snapshot: AdminSnapshot; onCha
                         <li key={member.id} className="admin-member">
                           <Avatar name={member.name} />
                           <span className="admin-member__info">
-                            <span className="admin-member__name">{member.name}</span>
+                            <span className="admin-member__name">
+                              <span className="admin-member__text">{member.name}</span>
+                              <UserCode code={member.code} />
+                            </span>
                             <span className="admin-member__role">{role || "Sin rol ni generación"}</span>
                           </span>
                           {inactiveById.has(member.id) && (
@@ -158,7 +162,9 @@ function AdminHomeView({ snapshot, onChanged }: { snapshot: AdminSnapshot; onCha
                   ⚠
                 </span>
                 <span className="admin-alert__text">
-                  {alert.member.name}
+                  <span className="admin-alert__name">
+                    {alert.member.name} <UserCode code={alert.member.code} />
+                  </span>
                   <span className="admin-alert__detail">
                     {alert.team.name} · {inactiveText(alert.daysInactive)}
                   </span>

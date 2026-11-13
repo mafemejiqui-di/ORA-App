@@ -1,0 +1,23 @@
+.user-code {
+  display: inline-block;
+  flex: none;
+  border-radius: 999px;
+  background: var(--color-teal-pill);
+  color: var(--color-primary);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.user-code--sm {
+  padding: 1px 7px;
+  font-size: 10px;
+  line-height: 15px;
+}
+
+.user-code--md {
+  padding: 3px 12px;
+  font-size: 12px;
+  line-height: 18px;
+}

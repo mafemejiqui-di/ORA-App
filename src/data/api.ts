@@ -132,6 +132,7 @@ async function loadSession(): Promise<Session | null> {
     role: profile.role as Role | null,
     generation: profile.generation as GenerationId | null,
     teamId: profile.team_id,
+    code: profile.code ?? null,
     isAdmin: profile.is_admin,
     createdAt: profile.created_at,
     settings: { ...DEFAULT_SETTINGS, ...(profile.settings as Partial<UserSettings>) },
@@ -360,7 +361,7 @@ export function joinTeam(teamCode: string): Promise<Session> {
   return mutate(async () => unwrap(await supabase.rpc("join_team", { p_code: teamCode.trim().toUpperCase() })));
 }
 
-type MemberRow = { id: string; name: string; role: string | null; generation: string | null; has_totem: boolean };
+type MemberRow = { id: string; name: string; role: string | null; generation: string | null; has_totem: boolean; code?: string | null };
 
 /** Integrantes del equipo (la base de datos solo deja verlos a sus integrantes y a la admin). */
 export async function getTeamMembers(teamId: string | null): Promise<TeamMember[]> {
@@ -373,6 +374,7 @@ export async function getTeamMembers(teamId: string | null): Promise<TeamMember[
       role: m.role as Role | null,
       generation: m.generation as GenerationId | null,
       hasTotem: m.has_totem,
+      code: m.code ?? null,
     }));
   } catch (err) {
     throw toApiError(err);

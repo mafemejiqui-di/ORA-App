@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Avatar } from "../../components/Avatar";
+import { UserCode } from "../../components/UserCode";
 import { getGeneration } from "../../data/catalogs";
 import { getTeamTotems } from "../../data/api";
 import type { TeamMember } from "../../data/teamData";
@@ -57,7 +58,10 @@ export function TeamManage({ team, members, inactiveById, patterns, onChanged }:
                 >
                   <Avatar name={member.name} />
                   <span className="admin-member__info">
-                    <span className="admin-member__name">{member.name}</span>
+                    <span className="admin-member__name">
+                      <span className="admin-member__text">{member.name}</span>
+                      <UserCode code={member.code} />
+                    </span>
                     <span className="admin-member__role">{role || "Sin rol ni generación"}</span>
                   </span>
                   {inactiveById.has(member.id) && (

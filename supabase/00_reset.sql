@@ -39,5 +39,8 @@ drop function if exists
   public.save_diagnosis(text, text, text),
   public.save_decision(text, text[], text),
   public.save_closing(text, text, text[]),
-  public.get_team_members(uuid)
+  public.get_team_members(uuid),
+  public.next_profile_code()
   cascade;
+
+drop sequence if exists public.profile_code_seq;
